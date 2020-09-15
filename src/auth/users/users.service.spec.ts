@@ -8,7 +8,7 @@ import {
   FindManyOptions,
   DeleteResult,
 } from 'typeorm';
-import { User } from './user';
+import { User } from './models/user.model';
 import { UsersService } from './users.service';
 
 const userMock: User = {
@@ -23,6 +23,7 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
+  hashPassword(): void {},
 };
 
 const updateResultMock: UpdateResult = {

@@ -4,12 +4,17 @@ import {
   Post,
   UseGuards,
   ValidationPipe,
+  HttpException,
+  Catch,
+  UseFilters,
 } from '@nestjs/common';
-import { UserDTO, UserLoginCredentials } from '../app.controller';
-import { AuthService, Tokens } from './auth.service';
-import { User } from './users/user';
+import { UserDTO } from './users/models/UserDTO.model';
+import { AuthService, UserWithoutSensitiveData } from './auth.service';
+import { Tokens } from './models/Tokens.model';
+import { User } from './users/models/user.model';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guards';
+import { UserLoginCredentials } from './users/models/UserLoginCredentials.model';
 
 interface RefreshToken {
   refresh_token: string;
@@ -26,7 +31,9 @@ export class AuthController {
   }
 
   @Post('register')
-  public async register(@Body(ValidationPipe) user: UserDTO): Promise<User> {
+  public async register(
+    @Body(ValidationPipe) user: UserDTO,
+  ): Promise<UserWithoutSensitiveData> {
     return this.authService.register(user);
   }
 

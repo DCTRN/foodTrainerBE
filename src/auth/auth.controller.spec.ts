@@ -4,11 +4,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthController } from './auth.controller';
-import { AuthService, Tokens } from './auth.service';
-import { User } from './users/user';
+import { AuthService } from './auth.service';
+import { Tokens } from './models/Tokens.model';
+import { User } from './users/models/user.model';
 import { UsersService } from './users/users.service';
 import { of } from 'rxjs';
-import { UserDTO } from 'src/app.controller';
+import { UserDTO } from 'src/auth/users/models/UserDTO.model';
 
 const tokensMock: Tokens = {
   access_token:
@@ -32,6 +33,7 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
+  hashPassword(): void {},
 };
 
 const userDTOMock: UserDTO = {

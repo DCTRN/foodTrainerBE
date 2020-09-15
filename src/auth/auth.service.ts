@@ -1,20 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserDTO, UserLoginCredentials } from 'src/app.controller';
-import { User } from './users/user';
+import { UserDTO } from 'src/auth/users/models/UserDTO.model';
+import { User } from './users/models/user.model';
 import { UsersService } from './users/users.service';
+import { UserLoginCredentials } from './users/models/UserLoginCredentials.model';
+import * as bcrypt from 'bcrypt';
+import { DecodedToken } from './models/DecodedToken.model';
+import { Tokens } from './models/Tokens.model';
 
-export interface Tokens {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-}
-
-export interface DecodedToken {
+export interface UserWithoutSensitiveData {
+  id: number;
   username: string;
-  password: string;
-  iat: number;
-  exp: number;
+  email: string;
+  birthDate: Date;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  authenticationLevel: number;
 }
 
 @Injectable()
@@ -28,7 +30,11 @@ export class AuthService {
 
   public async validateUser(username: string, pass: string): Promise<User> {
     const user = await this.usersService.findByUsername(username);
-    return user?.password === pass ? user : null;
+    if (!user) {
+      return;
+    }
+    const arePasswordEqual = await bcrypt.compare(pass, user.password);
+    return arePasswordEqual ? user : null;
   }
 
   public login(user: UserLoginCredentials): Tokens {
@@ -45,7 +51,6 @@ export class AuthService {
   }
 
   public refresh(token: string): Tokens {
-    console.log(this.jwtService.decode(token));
     const decodedToken = this.jwtService.decode(token) as DecodedToken;
     const payload = {
       username: decodedToken.username,
@@ -64,10 +69,22 @@ export class AuthService {
       refresh_token,
       expires_in,
     };
+    return null;
   }
 
-  public register(user: UserDTO): Promise<User> {
-    return this.usersService.add(user);
+  public async register(user: UserDTO): Promise<UserWithoutSensitiveData> {
+    const u = await this.usersService.add(user);
+    const userWithoutSensitiveData: UserWithoutSensitiveData = {
+      id: u.id,
+      username: u.username,
+      email: u.email,
+      birthDate: u.birthDate,
+      phoneNumber: u.phoneNumber,
+      firstName: u.firstName,
+      lastName: u.lastName,
+      authenticationLevel: u.authenticationLevel,
+    };
+    return userWithoutSensitiveData;
   }
 
   private generateRefreshToken(payload: UserLoginCredentials) {

@@ -3,11 +3,14 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
-import { UserDTO } from 'src/app.controller';
+import { UserDTO } from 'src/auth/users/models/UserDTO.model';
 import { DeleteResult, Repository } from 'typeorm';
-import { AuthService, DecodedToken, Tokens } from './auth.service';
-import { User } from './users/user';
+import { AuthService } from './auth.service';
+import { Tokens } from './models/Tokens.model';
+import { DecodedToken } from './models/DecodedToken.model';
+import { User } from './users/models/user.model';
 import { UsersService } from './users/users.service';
+import * as bcrypt from 'bcrypt';
 
 const userMock: User = {
   id: 1,
@@ -21,6 +24,8 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
+
+  hashPassword(): void {},
 };
 
 const userDTOMock: UserDTO = {
@@ -110,6 +115,21 @@ export class JwtServiceMock {
   }
 }
 
+const userFromDbMock: User = {
+  id: 1,
+  username: 'username',
+  password: bcrypt.hashSync('password', 10),
+  email: 'email',
+  birthDate: new Date(),
+  accountCreationDate: new Date(),
+  phoneNumber: '111222333',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  authenticationLevel: 1,
+  hashPassword: jest.fn(),
+  isActive: true,
+};
+
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
@@ -144,7 +164,11 @@ describe('AuthService', () => {
   });
 
   it('should validate user', async () => {
-    const findByUsernameSpy = jest.spyOn(usersService, 'findByUsername');
+    const findByUsernameSpy = jest
+      .spyOn(usersService, 'findByUsername')
+      .mockImplementation(
+        () => new Promise(resolve => resolve(userFromDbMock)),
+      );
 
     ((usersService as unknown) as UsersServiceMock).setReturnedValue(null);
     const errorResult = await service.validateUser(
@@ -154,10 +178,12 @@ describe('AuthService', () => {
     expect(findByUsernameSpy).toHaveBeenCalledTimes(1);
     expect(errorResult).toBeFalsy();
 
-    ((usersService as unknown) as UsersServiceMock).setReturnedValue(userMock);
+    ((usersService as unknown) as UsersServiceMock).setReturnedValue(
+      userFromDbMock,
+    );
     const successResult = await service.validateUser(
-      userMock.username,
-      userMock.password,
+      userFromDbMock.username,
+      'password',
     );
     expect(findByUsernameSpy).toHaveBeenCalledTimes(2);
     expect(successResult).toBeTruthy();
@@ -195,7 +221,12 @@ describe('AuthService', () => {
   });
 
   it('should register', async () => {
-    const addSpy = jest.spyOn(usersService, 'add').mockImplementation();
+    const addSpy = jest.spyOn(usersService, 'add').mockImplementation(
+      () =>
+        new Promise(resolve => {
+          resolve(userFromDbMock);
+        }),
+    );
 
     await service.register(userDTOMock);
 
