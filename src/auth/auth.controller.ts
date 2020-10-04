@@ -2,18 +2,17 @@ import {
   Body,
   Controller,
   Post,
+  UseFilters,
   UseGuards,
   ValidationPipe,
-  HttpException,
-  Catch,
-  UseFilters,
 } from '@nestjs/common';
-import { UserDTO } from './users/models/UserDTO.model';
+import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
+import { UnauthorizedFilter } from 'src/core/filters/unauthorized.filter';
 import { AuthService, UserWithoutSensitiveData } from './auth.service';
-import { Tokens } from './models/Tokens.model';
-import { User } from './users/models/user.model';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guards';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { Tokens } from './models/tokens.model';
+import { UserDTO } from './users/models/UserDTO.model';
 import { UserLoginCredentials } from './users/models/UserLoginCredentials.model';
 
 interface RefreshToken {
@@ -21,6 +20,7 @@ interface RefreshToken {
 }
 
 @Controller('auth')
+@UseFilters(DbConstraintExceptionsFilter, UnauthorizedFilter)
 export class AuthController {
   constructor(private authService: AuthService) {}
 

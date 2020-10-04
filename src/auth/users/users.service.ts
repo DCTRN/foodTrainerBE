@@ -12,13 +12,8 @@ export class UsersService {
   ) {}
 
   public async add(user: UserDTO): Promise<User> {
-    try {
-      const dbUser = this.userRepository.create(user);
-      return this.userRepository.save(dbUser);
-    } catch (error) {
-      console.log('error');
-      console.log(error);
-    }
+    const dbUser = this.userRepository.create(user);
+    return this.userRepository.save(dbUser);
   }
 
   public async update(id: number, user: Partial<User>): Promise<User> {

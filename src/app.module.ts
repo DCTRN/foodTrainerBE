@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { DbConstraintExceptionsFilter } from './core/filters/db-constraint-exceptions.filter';
 import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter';
 
 @Module({
@@ -26,7 +25,7 @@ import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter'
     AppService,
     {
       provide: APP_FILTER,
-      useClass: DbConstraintExceptionsFilter,
+      useClass: GlobalExceptionsFilter,
     },
   ],
 })

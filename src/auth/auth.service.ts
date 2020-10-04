@@ -5,8 +5,8 @@ import { User } from './users/models/user.model';
 import { UsersService } from './users/users.service';
 import { UserLoginCredentials } from './users/models/UserLoginCredentials.model';
 import * as bcrypt from 'bcrypt';
-import { DecodedToken } from './models/DecodedToken.model';
-import { Tokens } from './models/Tokens.model';
+import { DecodedToken } from './models/decoded-token.model';
+import { Tokens } from './models/tokens.model';
 
 export interface UserWithoutSensitiveData {
   id: number;

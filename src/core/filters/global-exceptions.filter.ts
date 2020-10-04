@@ -3,7 +3,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 
 @Catch()
@@ -24,7 +24,7 @@ export class GlobalExceptionsFilter<T> implements ExceptionFilter {
       path: request.url,
       error: {
         error: 'unknown',
-        errorDescription: 'Unknown error.',
+        errorDescription: 'Unknown error',
       },
     });
   }

@@ -5,11 +5,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { Tokens } from './models/Tokens.model';
+import { Tokens } from './models/tokens.model';
 import { User } from './users/models/user.model';
 import { UsersService } from './users/users.service';
 import { of } from 'rxjs';
 import { UserDTO } from 'src/auth/users/models/UserDTO.model';
+import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 const tokensMock: Tokens = {
   access_token:
@@ -33,6 +35,7 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   hashPassword(): void {},
 };
 
@@ -57,6 +60,10 @@ describe('Auth Controller', () => {
         {
           provide: getRepositoryToken(User),
           useClass: Repository,
+        },
+        {
+          provide: APP_FILTER,
+          useClass: DbConstraintExceptionsFilter,
         },
         UsersService,
         AuthService,
