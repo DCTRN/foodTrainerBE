@@ -6,10 +6,11 @@ import { UserFriendsService } from './repositories/user-friends.repository.servi
 import { UsersService } from './repositories/users.service';
 import { UsersController } from './users.controller';
 import { UserFriendsController } from './user-friends.controller';
+import { UserFriendsHandlerService } from './services/user-friends-handler.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, UserFriends])],
-  providers: [UsersService, UserFriendsService],
+  providers: [UsersService, UserFriendsService, UserFriendsHandlerService],
   exports: [UsersService, TypeOrmModule],
   controllers: [UsersController, UserFriendsController],
 })
