@@ -5,7 +5,7 @@ import { User } from './models/user.model';
 import { UserFriendsService } from './repositories/user-friends.repository.service';
 import { UsersService } from './repositories/users.service';
 import { UsersController } from './users.controller';
-import { UserFriendsController } from './user-friends/user-friends.controller';
+import { UserFriendsController } from './user-friends.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, UserFriends])],
