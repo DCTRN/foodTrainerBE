@@ -4,9 +4,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { UserFriends } from './user-friends.model';
 
 @Entity()
 export class User {
@@ -50,4 +53,16 @@ export class User {
   public hashPassword(): void {
     this.password = bcrypt.hashSync(this.password, 10);
   }
+
+  @OneToMany(
+    type => UserFriends,
+    userFiends => userFiends.user,
+  )
+  userFriends1: UserFriends[];
+
+  @OneToMany(
+    type => UserFriends,
+    userFiends => userFiends.friend,
+  )
+  userFriends2: UserFriends[];
 }

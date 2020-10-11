@@ -1,17 +1,17 @@
+import { APP_FILTER } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { of } from 'rxjs';
+import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
+import { UserDTO } from 'src/users/models/user-dto.model';
+import { User } from 'src/users/models/user.model';
+import { UsersService } from 'src/users/repositories/users.service';
 import { Repository } from 'typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { Tokens } from './models/tokens.model';
-import { User } from './users/models/user.model';
-import { UsersService } from './users/users.service';
-import { of } from 'rxjs';
-import { UserDTO } from 'src/auth/users/models/UserDTO.model';
-import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
-import { APP_FILTER } from '@nestjs/core';
 
 const tokensMock: Tokens = {
   access_token:
@@ -37,6 +37,8 @@ const userMock: User = {
   isActive: true,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   hashPassword(): void {},
+  userFriends1: null,
+  userFriends2: null,
 };
 
 const userDTOMock: UserDTO = {

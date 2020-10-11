@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter';
+import { UserFriends } from './users/models/user-friends.model';
+import { User } from './users/models/user.model';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter'
       database: 'foodTrainer',
       autoLoadEntities: true,
       synchronize: true,
+      entities: [User, UserFriends],
     }),
   ],
   controllers: [AppController],

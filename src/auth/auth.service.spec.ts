@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { of } from 'rxjs';
-import { UserDTO } from 'src/auth/users/models/UserDTO.model';
+import { UserDTO } from 'src/users/models/user-dto.model';
+import { User } from 'src/users/models/user.model';
+import { UsersService } from 'src/users/repositories/users.service';
 import { DeleteResult, Repository } from 'typeorm';
 import { AuthService } from './auth.service';
-import { Tokens } from './models/tokens.model';
 import { DecodedToken } from './models/decoded-token.model';
-import { User } from './users/models/user.model';
-import { UsersService } from './users/users.service';
-import * as bcrypt from 'bcrypt';
+import { Tokens } from './models/tokens.model';
 
 const userMock: User = {
   id: 1,
@@ -24,8 +24,10 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   hashPassword(): void {},
+  userFriends1: null,
+  userFriends2: null,
 };
 
 const userDTOMock: UserDTO = {
@@ -128,6 +130,8 @@ const userFromDbMock: User = {
   authenticationLevel: 1,
   hashPassword: jest.fn(),
   isActive: true,
+  userFriends1: null,
+  userFriends2: null,
 };
 
 describe('AuthService', () => {

@@ -1,23 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserDTO } from 'src/auth/users/models/UserDTO.model';
-import { User } from './users/models/user.model';
-import { UsersService } from './users/users.service';
-import { UserLoginCredentials } from './users/models/UserLoginCredentials.model';
 import * as bcrypt from 'bcrypt';
+import { UserDTO } from 'src/users/models/user-dto.model';
+import { UserLoginCredentials } from 'src/users/models/user-login-credentials.model';
+import { User } from 'src/users/models/user.model';
+import { UsersService } from 'src/users/repositories/users.service';
+import { UserWithoutSensitiveData } from '../users/models/user-without-sensitive-data';
 import { DecodedToken } from './models/decoded-token.model';
 import { Tokens } from './models/tokens.model';
-
-export interface UserWithoutSensitiveData {
-  id: number;
-  username: string;
-  email: string;
-  birthDate: Date;
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-  authenticationLevel: number;
-}
 
 @Injectable()
 export class AuthService {
