@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserDTO } from 'src/users/models/user-dto.model';
-import { UserLoginCredentials } from 'src/users/models/user-login-credentials.model';
-import { User } from 'src/users/models/user.model';
+import { UserDTO } from 'src/users/models/user/user-dto.model';
+import { UserLoginCredentials } from 'src/users/models/user/user-login-credentials.model';
+import { UserWithoutSensitiveData } from 'src/users/models/user/user-without-sensitive-data';
+import { User } from 'src/users/models/user/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
-import { UserWithoutSensitiveData } from '../users/models/user-without-sensitive-data';
 import { DecodedToken } from './models/decoded-token.model';
 import { Tokens } from './models/tokens.model';
 

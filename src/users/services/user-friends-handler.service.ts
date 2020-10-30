@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { UserDataConverter } from 'src/core/utils/user-data-converter';
-import { UserFriendsDTO } from '../models/user-friends-dto.model';
-import { IUserFriends } from '../models/user-friends.interface';
-import { UserFriends } from '../models/user-friends.model';
-import { UserWithoutSensitiveData } from '../models/user-without-sensitive-data';
-import { User } from '../models/user.model';
-import { UserfrienWithUserData } from '../models/userfriend-with-user-data.model';
+import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
+import { UserFriends } from '../models/user-friends/user-friends.model';
+import { UserWithoutSensitiveData } from '../models/user/user-without-sensitive-data';
+import { User } from '../models/user/user.model';
+import { UserfriendWithoutSensitiveData } from '../models/user-friends/user-friend-with-user-data.model';
 import { UserFriendsService } from '../repositories/user-friends.repository.service';
 import { UsersService } from '../repositories/users.service';
+import { UserfriendsWithoutSensitiveData } from '../models/user-friends/user-friends-without-sensitive-data.model';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class UserFriendsHandlerService {
@@ -17,44 +18,66 @@ export class UserFriendsHandlerService {
     private usersService: UsersService,
   ) {}
 
-  public async getAllUserFriendsByUserIs(
+  public async getAllUserFriendsByUserIds(
     userId: number,
-  ): Promise<Array<UserfrienWithUserData>> {
-    const userFriendsData: Array<User> = [];
-    const userFriends = await this.getUserFriends(userId);
-    await this.getUserFriendsData(userFriends, userFriendsData);
-    const friendsWithoutSensitiveData = this.trimUserFriendsSensitiveData(
-      userFriendsData,
-    );
-    return friendsWithoutSensitiveData.map(
-      (f: UserWithoutSensitiveData, index: number) =>
-        (({
-          ...f,
-          userFriendId: userFriends[index].id,
-          isAccepted: userFriends[index].isAccepted,
-        } as unknown) as UserfrienWithUserData),
-    );
+  ): Promise<Array<UserfriendWithoutSensitiveData>> {
+    const userFriendsData = await this.userFriendsService.findByUserId(userId);
+    return userFriendsData.map((f: UserFriends) => {
+      return {
+        id: f.id,
+        isAccepted: f.isAccepted,
+        friend: this.userDataConverter.trimUserSensitiveData(
+          this.getuserFriend(f, userId),
+        ),
+        friendshipRequesterId: f.friendshipRequesterId,
+        friendshipRequestDate: f.friendshipRequestDate,
+        friendshipAcceptDate: f.friendshipAcceptDate,
+      };
+    });
   }
 
   public async sendFriendRequest(
     friendRequest: UserFriendsDTO,
-  ): Promise<UserFriends> {
+  ): Promise<UserfriendsWithoutSensitiveData> {
     if (friendRequest.userId === friendRequest.friendId) {
-      // TODO check whether it is sufficient
       throw new Error('Bad friend request');
     }
-    return await this.userFriendsService.add({
+    const userFriends = await this.userFriendsService.add({
       ...friendRequest,
       isAccepted: false,
     });
+    return {
+      id: userFriends.id,
+      isAccepted: userFriends.isAccepted,
+      friend: this.userDataConverter.trimUserSensitiveData(userFriends.friend),
+      user: this.userDataConverter.trimUserSensitiveData(userFriends.friend),
+      friendshipRequesterId: userFriends.friendshipRequesterId,
+      friendshipRequestDate: userFriends.friendshipRequestDate,
+      friendshipAcceptDate: userFriends.friendshipAcceptDate,
+    };
   }
 
   public async acceptFriendRequest(
     friendRequestId: number,
-  ): Promise<UserFriends> {
-    return await this.userFriendsService.update(friendRequestId, {
-      isAccepted: true,
-    });
+  ): Promise<UserfriendsWithoutSensitiveData> {
+    const userFriends = await this.userFriendsService.update(friendRequestId);
+    return {
+      id: userFriends.id,
+      isAccepted: userFriends.isAccepted,
+      friend: this.userDataConverter.trimUserSensitiveData(userFriends.friend),
+      user: this.userDataConverter.trimUserSensitiveData(userFriends.friend),
+      friendshipRequesterId: userFriends.friendshipRequesterId,
+      friendshipRequestDate: userFriends.friendshipRequestDate,
+      friendshipAcceptDate: userFriends.friendshipAcceptDate,
+    };
+  }
+
+  public async deleteUserFriend(userFriendsId: number): Promise<DeleteResult> {
+    return await this.userFriendsService.delete(userFriendsId);
+  }
+
+  private getuserFriend(f: UserFriends, userId: number) {
+    return Number(f.friend.id) === Number(userId) ? f.user : f.friend;
   }
 
   private trimUserFriendsSensitiveData(
@@ -73,9 +96,5 @@ export class UserFriendsHandlerService {
       );
       userFriendsData.push(friendsData);
     }
-  }
-
-  private async getUserFriends(userId: number) {
-    return await this.userFriendsService.findByUserId(userId);
   }
 }

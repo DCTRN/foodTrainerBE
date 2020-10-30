@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
-import { UserFriendsDTO } from './models/user-friends-dto.model';
-import { UserFriends } from './models/user-friends.model';
-import { UserfrienWithUserData } from './models/userfriend-with-user-data.model';
+import { UserFriendsDTO } from './models/user-friends/user-friends-dto.model';
+import { UserFriends } from './models/user-friends/user-friends.model';
+import { UserfriendWithoutSensitiveData } from './models/user-friends/user-friend-with-user-data.model';
 import { UserFriendsHandlerService } from './services/user-friends-handler.service';
 import { UserFriendsController } from './user-friends.controller';
 
@@ -16,7 +16,7 @@ const friendRequestMock: UserFriendsDTO = {
 export class UserFriendsHandlerServiceMock {
   public async getAllUserFriendsByUserIs(
     userId: number,
-  ): Promise<Array<UserfrienWithUserData>> {
+  ): Promise<Array<UserfriendWithoutSensitiveData>> {
     return of(null).toPromise();
   }
 

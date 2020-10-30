@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
-import { UserDTO } from 'src/users/models/user-dto.model';
+import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { User } from 'src/users/models/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Repository } from 'typeorm';

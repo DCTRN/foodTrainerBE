@@ -1,5 +1,5 @@
-import { UserWithoutSensitiveData } from 'src/users/models/user-without-sensitive-data';
-import { User } from 'src/users/models/user.model';
+import { UserWithoutSensitiveData } from 'src/users/models/user/user-without-sensitive-data';
+import { User } from 'src/users/models/user/user.model';
 
 export class UserDataConverter {
   public trimUserSensitiveData(user: User): UserWithoutSensitiveData {

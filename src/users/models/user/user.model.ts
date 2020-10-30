@@ -4,12 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { UserFriends } from './user-friends.model';
+import { UserFriends } from '../user-friends/user-friends.model';
 
 @Entity()
 export class User {

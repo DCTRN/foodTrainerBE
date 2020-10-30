@@ -8,8 +8,8 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
-import { IUserFriends } from '../models/user-friends.interface';
-import { UserFriends } from '../models/user-friends.model';
+import { IUserFriends } from '../models/user-friends/user-friends.interface';
+import { UserFriends } from '../models/user-friends/user-friends.model';
 import { User } from '../models/user.model';
 import { UserFriendsService } from './user-friends.repository.service';
 

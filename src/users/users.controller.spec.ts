@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
-import { UserDTO } from './models/user-dto.model';
+import { UserDTO } from './models/user/user-dto.model';
 import { User } from './models/user.model';
 import { UsersService } from './repositories/users.service';
 import { UsersController } from './users.controller';

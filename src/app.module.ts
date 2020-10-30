@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter';
-import { UserFriends } from './users/models/user-friends.model';
-import { User } from './users/models/user.model';
+import { UserFriends } from './users/models/user-friends/user-friends.model';
+import { User } from './users/models/user/user.model';
 
 @Module({
   imports: [

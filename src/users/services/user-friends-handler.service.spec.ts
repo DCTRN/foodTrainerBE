@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
-import { UserDTO } from '../models/user-dto.model';
-import { UserFriendsDTO } from '../models/user-friends-dto.model';
-import { IUserFriends } from '../models/user-friends.interface';
-import { UserFriends } from '../models/user-friends.model';
+import { UserDTO } from '../models/user/user-dto.model';
+import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
+import { IUserFriends } from '../models/user-friends/user-friends.interface';
+import { UserFriends } from '../models/user-friends/user-friends.model';
 import { User } from '../models/user.model';
 import { UserFriendsService } from '../repositories/user-friends.repository.service';
 import { UsersService } from '../repositories/users.service';
@@ -182,7 +182,7 @@ describe('UserFriendsHandlerService', () => {
       .spyOn(usersService, 'findById')
       .mockReturnValue(of(friendMock1).toPromise());
 
-    const userFriends = await service.getAllUserFriendsByUserIs(1);
+    const userFriends = await service.getAllUserFriendsByUserIds(1);
 
     expect(findUserFriendsByUserIdSpy).toHaveBeenCalled();
     expect(userFriends).toBeTruthy();

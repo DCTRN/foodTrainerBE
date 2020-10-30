@@ -13,8 +13,8 @@ import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
 import { UnauthorizedFilter } from 'src/core/filters/unauthorized.filter';
 import { UserDataConverter } from 'src/core/utils/user-data-converter';
-import { UserDTO } from './models/user-dto.model';
-import { UserWithoutSensitiveData } from './models/user-without-sensitive-data';
+import { UserDTO } from './models/user/user-dto.model';
+import { UserWithoutSensitiveData } from './models/user/user-without-sensitive-data';
 import { UsersService } from './repositories/users.service';
 
 @Controller('users')
@@ -26,12 +26,17 @@ export class UsersController {
   @Get('')
   public async getUserCredentials(
     @Query('username') username: string,
-  ): Promise<UserWithoutSensitiveData> {
-    if (!username) {
-      return;
+    @Query('findBy') findBy: string,
+  ): Promise<Array<UserWithoutSensitiveData>> {
+    if (username) {
+      const user = await this.usersService.findByUsername(username);
+      return [this.userDataConverter.trimUserSensitiveData(user)];
     }
-    const user = await this.usersService.findByUsername(username);
-    return this.userDataConverter.trimUserSensitiveData(user);
+
+    if (findBy) {
+      const u = await this.usersService.findBySimilarToUsername(findBy);
+      return this.userDataConverter.trimUsersSensitiveData(u);
+    }
   }
 
   @Patch(':id')

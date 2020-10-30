@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { of } from 'rxjs';
-import { UserDTO } from 'src/users/models/user-dto.model';
+import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { User } from 'src/users/models/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import { DeleteResult, Repository } from 'typeorm';

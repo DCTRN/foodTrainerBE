@@ -8,10 +8,10 @@ import {
 } from '@nestjs/common';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
 import { UnauthorizedFilter } from 'src/core/filters/unauthorized.filter';
-import { UserDTO } from 'src/users/models/user-dto.model';
-import { UserLoginCredentials } from 'src/users/models/user-login-credentials.model';
+import { UserDTO } from 'src/users/models/user/user-dto.model';
+import { UserLoginCredentials } from 'src/users/models/user/user-login-credentials.model';
+import { UserWithoutSensitiveData } from 'src/users/models/user/user-without-sensitive-data';
 import { AuthService } from './auth.service';
-import { UserWithoutSensitiveData } from "../users/models/user-without-sensitive-data";
 import { JwtRefreshAuthGuard } from './guards/jwt-refresh-auth.guards';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Tokens } from './models/tokens.model';
