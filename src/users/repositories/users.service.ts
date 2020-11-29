@@ -17,7 +17,8 @@ export class UsersService {
   }
 
   public async update(id: number, user: Partial<User>): Promise<User> {
-    await this.userRepository.update(id, user);
+    const u = await this.updateEntityValues(id, user);
+    await this.userRepository.save(u);
     return this.findById(id);
   }
 
@@ -48,5 +49,13 @@ export class UsersService {
 
   public delete(id: number): Promise<DeleteResult> {
     return this.userRepository.delete(id);
+  }
+
+  private async updateEntityValues(id: number, user: Partial<User>) {
+    const u = await this.findById(id);
+    Object.keys(user).forEach((key: string) => {
+      u[key] = user[key];
+    });
+    return u;
   }
 }

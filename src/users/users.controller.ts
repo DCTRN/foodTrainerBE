@@ -18,7 +18,7 @@ import { UserWithoutSensitiveData } from './models/user/user-without-sensitive-d
 import { UsersService } from './repositories/users.service';
 
 @Controller('users')
-@UseGuards(JwtAccessAuthGuard)
+// @UseGuards(JwtAccessAuthGuard)
 @UseFilters(DbConstraintExceptionsFilter, UnauthorizedFilter)
 export class UsersController {
   private userDataConverter = new UserDataConverter();
@@ -42,7 +42,7 @@ export class UsersController {
   @Patch(':id')
   public async updateUserCredentials(
     @Param('id') id: number,
-    @Body(ValidationPipe) user: UserDTO,
+    @Body(ValidationPipe) user: Partial<UserDTO>,
   ): Promise<UserWithoutSensitiveData> {
     if (!id) {
       return;

@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import {
   BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -49,7 +50,8 @@ export class User {
   public isActive: boolean;
 
   @BeforeInsert()
-  public hashPassword(): void {
+  @BeforeUpdate()
+  public hashPasswordOnInit(): void {
     this.password = bcrypt.hashSync(this.password, 10);
   }
 
