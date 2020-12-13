@@ -8,7 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 import { UserProduct } from '../user-products/user-product.model';
-import { User } from '../user/user.model';
+import { User } from '../../../users/models/user/user.model';
 
 @Entity()
 @Unique('Product already exists', ['producer', 'name'])

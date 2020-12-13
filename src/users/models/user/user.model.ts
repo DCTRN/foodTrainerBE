@@ -10,9 +10,9 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { Product } from '../products/product.model';
+import { Product } from '../../../food/models/products/product.model';
 import { UserFriends } from '../user-friends/user-friends.model';
-import { UserProduct } from '../user-products/user-product.model';
+import { UserProduct } from '../../../food/models/user-products/user-product.model';
 
 @Entity()
 export class User {

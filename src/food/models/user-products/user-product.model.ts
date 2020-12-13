@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from '../products/product.model';
-import { User } from '../user/user.model';
+import { User } from '../../../users/models/user/user.model';
 import { MealEatTimeType } from './meal-eat-time-type.enum';
 
 @Entity()

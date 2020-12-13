@@ -5,9 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter';
-import { Product } from './users/models/products/product.model';
+import { Product } from './food/models/products/product.model';
 import { UserFriends } from './users/models/user-friends/user-friends.model';
-import { UserProduct } from './users/models/user-products/user-product.model';
+import { UserProduct } from './food/models/user-products/user-product.model';
 import { User } from './users/models/user/user.model';
 
 @Module({
