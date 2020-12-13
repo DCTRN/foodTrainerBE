@@ -18,7 +18,7 @@ import { UserWithoutSensitiveData } from './models/user/user-without-sensitive-d
 import { UsersService } from './repositories/users.service';
 
 @Controller('users')
-// @UseGuards(JwtAccessAuthGuard)
+@UseGuards(JwtAccessAuthGuard)
 @UseFilters(DbConstraintExceptionsFilter, UnauthorizedFilter)
 export class UsersController {
   private userDataConverter = new UserDataConverter();

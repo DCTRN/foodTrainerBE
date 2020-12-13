@@ -6,10 +6,13 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { Product } from '../products/product.model';
 import { UserFriends } from '../user-friends/user-friends.model';
+import { UserProduct } from '../user-products/user-product.model';
 
 @Entity()
 export class User {
@@ -51,7 +54,7 @@ export class User {
 
   @BeforeInsert()
   @BeforeUpdate()
-  public hashPasswordOnInit(): void {
+  public hashPassword(): void {
     this.password = bcrypt.hashSync(this.password, 10);
   }
 
@@ -59,11 +62,23 @@ export class User {
     type => UserFriends,
     userFiends => userFiends.user,
   )
-  userFriends1: UserFriends[];
+  public userFriends1: UserFriends[];
 
   @OneToMany(
     type => UserFriends,
     userFiends => userFiends.friend,
   )
-  userFriends2: UserFriends[];
+  public userFriends2: UserFriends[];
+
+  @OneToOne(
+    type => Product,
+    product => product.creator,
+  )
+  public productCreator: Product;
+
+  @OneToMany(
+    type => UserProduct,
+    userProduct => userProduct.user,
+  )
+  public userProducts: UserProduct[];
 }

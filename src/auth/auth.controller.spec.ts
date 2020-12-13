@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { APP_FILTER } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -6,7 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
 import { UserDTO } from 'src/users/models/user/user-dto.model';
-import { User } from 'src/users/models/user.model';
+import { User } from 'src/users/models/user/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Repository } from 'typeorm';
 import { AuthController } from './auth.controller';
@@ -35,10 +36,11 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const userDTOMock: UserDTO = {

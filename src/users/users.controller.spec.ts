@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
 import { UserDTO } from './models/user/user-dto.model';
-import { User } from './models/user.model';
+import { User } from './models/user/user.model';
 import { UsersService } from './repositories/users.service';
 import { UsersController } from './users.controller';
 
@@ -16,11 +17,13 @@ const userMock: User = {
   firstName: 'firstName',
   lastName: 'lastName',
   accountCreationDate: new Date(),
+  hashPassword: () => {},
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const userModified: UserDTO = {
@@ -38,10 +41,12 @@ const userMockModified: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
+  hashPassword: () => {},
   ...userModified,
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const deleteMock: DeleteResult = {
@@ -93,8 +98,8 @@ describe('Users Controller', () => {
       ],
     }).compile();
 
-    controller = module.get<UsersController>(UsersController);
     usersService = module.get<UsersService>(UsersService);
+    controller = module.get<UsersController>(UsersController);
   });
 
   it('should be defined', () => {
@@ -104,7 +109,7 @@ describe('Users Controller', () => {
   it('should get user credentials by usernames', async () => {
     ((usersService as unknown) as UsersServiceMock).setReturnedValue(userMock);
     const findByUsernameSpy = jest.spyOn(usersService, 'findByUsername');
-    const credentials = await controller.getUserCredentials('mike');
+    const credentials = (await controller.getUserCredentials('mike', null))[0];
 
     expect(credentials).toBeTruthy();
     expect(findByUsernameSpy).toHaveBeenCalled();

@@ -71,14 +71,13 @@ export class UserFriendsService {
   private async createQueryForUserFriendsByGivenUserId(
     id: number,
   ): Promise<UserFriends[]> {
-    const test = await this.userFriendsRepository
+    return await this.userFriendsRepository
       .createQueryBuilder('user_friends')
       .innerJoinAndSelect('user_friends.friend', 'friend')
       .innerJoinAndSelect('user_friends.user', 'user')
       .where('user.id = :userId', { userId: id })
       .orWhere('friend.id = :friendId', { friendId: id })
       .getMany();
-    return test;
   }
 
   private async saveUserFriendRelationToDb(

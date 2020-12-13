@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -5,7 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { of } from 'rxjs';
 import { UserDTO } from 'src/users/models/user/user-dto.model';
-import { User } from 'src/users/models/user.model';
+import { User } from 'src/users/models/user/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import { DeleteResult, Repository } from 'typeorm';
 import { AuthService } from './auth.service';
@@ -24,10 +25,11 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const userDTOMock: UserDTO = {
@@ -132,6 +134,8 @@ const userFromDbMock: User = {
   isActive: true,
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 describe('AuthService', () => {

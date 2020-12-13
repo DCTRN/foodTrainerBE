@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
-import { UserDTO } from '../models/user/user-dto.model';
 import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
 import { IUserFriends } from '../models/user-friends/user-friends.interface';
 import { UserFriends } from '../models/user-friends/user-friends.model';
-import { User } from '../models/user.model';
+import { UserDTO } from '../models/user/user-dto.model';
+import { User } from '../models/user/user.model';
 import { UserFriendsService } from '../repositories/user-friends.repository.service';
 import { UsersService } from '../repositories/users.service';
 import { UserFriendsHandlerService } from './user-friends-handler.service';
@@ -23,9 +24,11 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const friendMock1: User = {
@@ -40,9 +43,11 @@ const friendMock1: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const friendMock2: User = {
@@ -57,9 +62,11 @@ const friendMock2: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const userFriendsMock: UserFriends[] = [
@@ -68,12 +75,20 @@ const userFriendsMock: UserFriends[] = [
     user: userMock,
     friend: friendMock1,
     isAccepted: true,
+    friendshipRequesterId: 1,
+    friendshipAcceptDate: null,
+    friendshipRequestDate: null,
+    createFriendshipAcceptDate: null,
   },
   {
     id: 2,
     user: userMock,
     friend: friendMock2,
     isAccepted: true,
+    friendshipRequesterId: 1,
+    friendshipAcceptDate: null,
+    friendshipRequestDate: null,
+    createFriendshipAcceptDate: null,
   },
 ];
 
@@ -187,7 +202,6 @@ describe('UserFriendsHandlerService', () => {
     expect(findUserFriendsByUserIdSpy).toHaveBeenCalled();
     expect(userFriends).toBeTruthy();
     expect(userFriends.length).toEqual(2);
-    console.log(userFriends);
   });
 
   it('should send friend request', async () => {

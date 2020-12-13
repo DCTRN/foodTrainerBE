@@ -14,7 +14,7 @@ const friendRequestMock: UserFriendsDTO = {
 
 @Injectable()
 export class UserFriendsHandlerServiceMock {
-  public async getAllUserFriendsByUserIs(
+  public async getAllUserFriendsByUserIds(
     userId: number,
   ): Promise<Array<UserfriendWithoutSensitiveData>> {
     return of(null).toPromise();
@@ -61,7 +61,7 @@ describe('UserFriends Controller', () => {
   it('should get all user friends for given user id', async () => {
     const getAllUserFriendsSpy = spyOn(
       userFriendsHandlerService,
-      'getAllUserFriendsByUserIs',
+      'getAllUserFriendsByUserIds',
     );
 
     await controller.getAllUserFriends(1);

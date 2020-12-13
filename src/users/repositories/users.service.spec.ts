@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { of } from 'rxjs';
 import {
   DeepPartial,
+  DeleteResult,
+  FindManyOptions,
   Repository,
   UpdateResult,
-  FindManyOptions,
-  DeleteResult,
 } from 'typeorm';
-import { User } from '../models/user.model';
+import { User } from '../models/user/user.model';
 import { UsersService } from './users.service';
 
-const userMock: User = {
+const userMock1: User = {
   id: 1,
   username: 'usernameMock',
   password: 'secretPassword123',
@@ -23,9 +24,11 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const updateResultMock: UpdateResult = {
@@ -39,14 +42,14 @@ const deleteMock: DeleteResult = {
 
 class UserRepositoryMock {
   public create(entityLike: DeepPartial<User>): User {
-    return userMock;
+    return userMock1;
   }
   public async save(entity: User): Promise<User> {
-    return of(userMock).toPromise();
+    return of(userMock1).toPromise();
   }
 
   public async findOne(id: string): Promise<User> {
-    return of(userMock).toPromise();
+    return of(userMock1).toPromise();
   }
 
   public async update(
@@ -57,7 +60,7 @@ class UserRepositoryMock {
   }
 
   public async find(options?: FindManyOptions<User>): Promise<Array<User>> {
-    return of([userMock]).toPromise();
+    return of([userMock1]).toPromise();
   }
 
   public async delete(id: number): Promise<DeleteResult> {
@@ -91,55 +94,55 @@ describe('UsersService', () => {
   it('should add user', async () => {
     const createSpy = jest
       .spyOn(userRepository, 'create')
-      .mockReturnValue(userMock);
+      .mockReturnValue(userMock1);
     const saveSpy = jest
       .spyOn(userRepository, 'save')
-      .mockReturnValue(new Promise(resolve => resolve(userMock)));
-    const addResult = await service.add(userMock);
+      .mockReturnValue(new Promise(resolve => resolve(userMock1)));
+    const addResult = await service.add(userMock1);
     expect(createSpy).toBeCalled();
     expect(saveSpy).toBeCalled();
-    expect(addResult.id).toEqual(userMock.id);
+    expect(addResult.id).toEqual(userMock1.id);
   });
 
   it('should update user', async () => {
     const updateSpy = jest
-      .spyOn(userRepository, 'update')
-      .mockReturnValue(of(updateResultMock).toPromise());
+      .spyOn(userRepository, 'save')
+      .mockImplementation(u => of(userMock1).toPromise());
     const findOneSpy = jest
       .spyOn(userRepository, 'findOne')
-      .mockReturnValue(new Promise(resolve => resolve(userMock)));
-    const updateResult = await service.update(userMock.id, {
+      .mockReturnValue(new Promise(resolve => resolve(userMock1)));
+    const updateResult = await service.update(userMock1.id, {
       username: 'newUsername',
     });
     expect(updateSpy).toBeCalled();
     expect(findOneSpy).toBeCalled();
-    expect(updateResult.id).toEqual(userMock.id);
+    expect(updateResult.id).toEqual(userMock1.id);
   });
 
   it('should find user by username', async () => {
     const findSpy = jest
       .spyOn(userRepository, 'find')
-      .mockReturnValue(of([userMock]).toPromise());
-    const foundUser = await service.findByUsername(userMock.username);
+      .mockReturnValue(of([userMock1]).toPromise());
+    const foundUser = await service.findByUsername(userMock1.username);
     expect(findSpy).toBeCalled();
-    expect(foundUser.id).toEqual(userMock.id);
+    expect(foundUser.id).toEqual(userMock1.id);
   });
 
   it('should find all users', async () => {
     const findSpy = jest
       .spyOn(userRepository, 'find')
-      .mockReturnValue(of([userMock]).toPromise());
+      .mockReturnValue(of([userMock1]).toPromise());
     const foundUsers = await service.findAll();
     expect(findSpy).toBeCalled();
     expect(foundUsers.length).toEqual(1);
-    expect(foundUsers[0].id).toEqual(userMock.id);
+    expect(foundUsers[0].id).toEqual(userMock1.id);
   });
 
   it('should delete user', async () => {
     const deleteSpy = jest
       .spyOn(userRepository, 'delete')
       .mockReturnValue(of(deleteMock).toPromise());
-    const deleteResult = await service.delete(userMock.id);
+    const deleteResult = await service.delete(userMock1.id);
     expect(deleteSpy).toBeCalled();
     expect(deleteResult).toBeTruthy();
   });

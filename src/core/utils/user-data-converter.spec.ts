@@ -1,5 +1,7 @@
-import { UserWithoutSensitiveData } from 'src/users/models/user-without-sensitive-data';
-import { User } from 'src/users/models/user.model';
+/* eslint-disable @typescript-eslint/no-empty-function */
+
+import { UserWithoutSensitiveData } from '../../users/models/user/user-without-sensitive-data';
+import { User } from '../../users/models/user/user.model';
 import { UserDataConverter } from './user-data-converter';
 
 const userMock: User = {
@@ -14,10 +16,11 @@ const userMock: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const userMock2: User = {
@@ -32,10 +35,11 @@ const userMock2: User = {
   accountCreationDate: new Date(),
   authenticationLevel: 1,
   isActive: true,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  hashPassword(): void {},
+  hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
+  productCreator: null,
+  userProducts: null,
 };
 
 const usersMock: Array<User> = [userMock, userMock2];

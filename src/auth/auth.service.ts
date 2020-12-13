@@ -59,7 +59,6 @@ export class AuthService {
       refresh_token,
       expires_in,
     };
-    return null;
   }
 
   public async register(user: UserDTO): Promise<UserWithoutSensitiveData> {

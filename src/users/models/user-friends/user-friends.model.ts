@@ -17,7 +17,7 @@ export class UserFriends {
   public isAccepted: boolean;
 
   @Column({ type: 'int' })
-  friendshipRequesterId: number;
+  public friendshipRequesterId: number;
 
   @CreateDateColumn()
   public friendshipRequestDate: Date;
@@ -28,22 +28,16 @@ export class UserFriends {
   @ManyToOne(
     type => User,
     user => user.userFriends1,
-    {
-      cascade: true,
-      eager: true,
-    },
+    { eager: true },
   )
-  user: User;
+  public user: User;
 
   @ManyToOne(
     type => User,
     user => user.userFriends2,
-    {
-      cascade: true,
-      eager: true,
-    },
+    { eager: true },
   )
-  friend: User;
+  public friend: User;
 
   @BeforeUpdate()
   public createFriendshipAcceptDate(): void {
