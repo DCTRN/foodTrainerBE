@@ -19,7 +19,7 @@ export class ProductDTO {
   public unit: string;
 
   @IsNumber()
-  @Min(0)
+  @Min(1)
   public amount: number;
 
   @IsNumber()

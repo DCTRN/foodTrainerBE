@@ -70,11 +70,11 @@ export class User {
   )
   public userFriends2: UserFriends[];
 
-  @OneToOne(
+  @OneToMany(
     type => Product,
     product => product.creator,
   )
-  public productCreator: Product;
+  public products: Product[];
 
   @OneToMany(
     type => UserProduct,

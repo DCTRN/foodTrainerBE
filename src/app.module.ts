@@ -5,14 +5,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { GlobalExceptionsFilter } from './core/filters/global-exceptions.filter';
+import { FoodModule } from './food/food.module';
 import { Product } from './food/models/products/product.model';
-import { UserFriends } from './users/models/user-friends/user-friends.model';
 import { UserProduct } from './food/models/user-products/user-product.model';
+import { UserFriends } from './users/models/user-friends/user-friends.model';
 import { User } from './users/models/user/user.model';
 
 @Module({
   imports: [
     AuthModule,
+    FoodModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

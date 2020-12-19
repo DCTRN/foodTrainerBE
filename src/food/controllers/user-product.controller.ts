@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, ValidationPipe } from '@nestjs/common';
 import { of } from 'rxjs';
 import {
   UserProductByDate,
@@ -13,6 +13,7 @@ export class UserProductController {
     return of(null).toPromise();
   }
   public modifyUserProduct(
+    @Body(ValidationPipe)
     userProduct: UserProductModification,
   ): Promise<UserProductDTO> {
     return of(null).toPromise();
@@ -26,7 +27,9 @@ export class UserProductController {
   ): Promise<UserProductByDate[]> {
     return of(null).toPromise();
   }
-  public deleteUserProduct(userProduct: UserProductDeletion): Promise<void> {
+  public deleteUserProduct(
+    @Body(ValidationPipe) userProduct: UserProductDeletion,
+  ): Promise<void> {
     return of(null).toPromise();
   }
 }

@@ -140,19 +140,6 @@ const createQueryBuilderForAddUserFriendSpy = jest
     innerJoinAndSelect: innerJoinAndSelectForForAddUserFriendSpy1,
   }));
 
-// .createQueryBuilder('user_friends')
-// .innerJoinAndSelect('user_friends.friend', 'friend')
-// .innerJoinAndSelect('user_friends.user', 'user')
-// .where('user.id = :userId', { userId: userFriendRequest.userId })
-// .andWhere('friend.id = :friendId', {
-//   friendId: userFriendRequest.friendId,
-// })
-// .orWhere('user.id = :friendId', {
-//   friendId: userFriendRequest.friendId,
-// })
-// .andWhere('friend.id = :userId', { userId: userFriendRequest.userId })
-// .getMany();
-
 class UsersFriendsRepositoryMock {
   private queryBuilderSpy: any;
 

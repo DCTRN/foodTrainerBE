@@ -29,7 +29,7 @@ class ProductDeletion {
 }
 
 class ProductController {
-    + findProductBy(searchText: string): Promise<ProductDTO[]>
+    + findProductBy(searchText: string, userId: number): Promise<ProductDTO[]>
     + addProduct(product: ProductDTO): Promise<ProductDTO>
     + modifyProduct(product: ProductModification): Promise<ProductDTO>
     + deleteProduct(product: ProductDeletion): Promise<void>
@@ -39,25 +39,34 @@ ProductController --> ProductService
 class UsersRepository {
 }
 
+class ProductToDTOConverter {
+    + convertProductc(product: Product): ProductDTO
+    + convertProducts(product: Product[]): ProductDTO[]
+}
+
 class ProductService {
     + findProductBy(searchText: string): Promise<ProductDTO[]>
+    + findProductsByUserId(userId: number): Promise<ProductDTO[]>
     + addProduct(product: ProductDTO): Promise<ProductDTO>
     + modifyProduct(product: ProductModification): Promise<ProductDTO>
     + deleteProduct(product: ProductDeletion): Promise<void>
 }
 ProductService --> ProductRepository
 ProductService --> UsersRepository
+ProductService --> ProductToDTOConverter
 ProductService --* ProductDTO
 ProductService --* ProductDeletion
 ProductService --* ProductModification
 
 class ProductRepository {
     + findProductBy(searchText: string): Promise<Product[]>
-    + add(product: Product): Promise<Product>
-    + update(product: Product): Promise<Product>
+    + findProductsBy(userId: number): Promise<Product[]>
+    + add(product: ProductDTO): Promise<Product>
+    + update(product: ProductDTO): Promise<Product>
     + delete(id: number): Promise<void>
 }
 ProductRepository --* Product
+ProductRepository --> UsersRepository
 
 class Product {
     + id: number

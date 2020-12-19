@@ -1,14 +1,15 @@
 import {
   Column,
   Entity,
-  JoinColumn,
+
+  ManyToOne,
   OneToMany,
-  OneToOne,
+
   PrimaryGeneratedColumn,
-  Unique,
+  Unique
 } from 'typeorm';
-import { UserProduct } from '../user-products/user-product.model';
 import { User } from '../../../users/models/user/user.model';
+import { UserProduct } from '../user-products/user-product.model';
 
 @Entity()
 @Unique('Product already exists', ['producer', 'name'])
@@ -40,10 +41,13 @@ export class Product {
   @Column({ type: 'float' })
   public fats: number;
 
-  @OneToOne(type => User, {
-    eager: true,
-  })
-  @JoinColumn()
+  @ManyToOne(
+    type => User,
+    user => user.products,
+    {
+      eager: true,
+    },
+  )
   public creator: User;
 
   @OneToMany(

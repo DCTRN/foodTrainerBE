@@ -1,4 +1,5 @@
-import { IsInstance, IsInt, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsInstance, IsInt, Min, ValidateNested } from 'class-validator';
 import { ProductDTO } from './product-dto.model';
 
 export class ProductModification {
@@ -6,6 +7,7 @@ export class ProductModification {
   @Min(1)
   public userId: number;
 
-  @IsInstance(ProductDTO)
+  @ValidateNested({ each: true })
+  @Type(type => ProductDTO)
   public product: ProductDTO;
 }
