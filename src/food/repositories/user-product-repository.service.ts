@@ -20,14 +20,16 @@ export class UserProductRepositoryService {
     private usersService: UsersService,
   ) {}
 
+  private readonly startHour = '00:00:00.000';
+
+  private readonly endHour = '23:59:59.999';
+
   public async findProductByDate(
     date: UserProductsByDateDTO,
   ): Promise<UserProduct[]> {
-    const start = '00:00:00.000';
-    const end = '23:59:59.999';
     const baseDate = date.date.toString().split('T')[0];
-    const startDate = `${baseDate} ${start}`;
-    const endDate = `${baseDate} ${end}`;
+    const startDate = `${baseDate} ${this.startHour}`;
+    const endDate = `${baseDate} ${this.endHour}`;
     return await this.userProductRepository.find({
       where: {
         user: date.userId,
@@ -36,10 +38,19 @@ export class UserProductRepositoryService {
     });
   }
 
-  public findProductByDateRange(
+  public async findProductByDateRange(
     date: UserProductsByDateRangeDTO,
   ): Promise<UserProduct[]> {
-    return of(null).toPromise();
+    const start = date.start.toString().split('T')[0];
+    const end = date.end.toString().split('T')[0];
+    const startDate = `${start} ${this.startHour}`;
+    const endDate = `${end} ${this.endHour}`;
+    return await this.userProductRepository.find({
+      where: {
+        user: date.userId,
+        date: Between(startDate, endDate),
+      },
+    });
   }
 
   public async add(userProduct: UserProductDTO): Promise<UserProduct> {

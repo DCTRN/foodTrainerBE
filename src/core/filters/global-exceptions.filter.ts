@@ -18,8 +18,6 @@ export class GlobalExceptionsFilter<T> implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    console.log('DUPA', exception);
-
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

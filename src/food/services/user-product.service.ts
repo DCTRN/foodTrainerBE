@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { of } from 'rxjs';
 import { UsersService } from 'src/users/repositories/users.service';
 import {
   UserProduct,
-  UserProductByDate,
   UserProductDeletion,
   UserProductDTO,
   UserProductModification,
@@ -11,12 +9,9 @@ import {
   UserProductsByDateRangeDTO,
 } from '../models';
 import { UserProductRepositoryService } from '../repositories/user-product-repository.service';
-import { ProductToDTOConverter } from '../utils/product-to-dto-converter';
 
 @Injectable()
 export class UserProductService {
-  private readonly productDTOConverter: ProductToDTOConverter = new ProductToDTOConverter();
-
   constructor(
     private userProductRepositoryService: UserProductRepositoryService,
     private usersService: UsersService,
@@ -86,12 +81,9 @@ export class UserProductService {
   }
 
   private createUserProductDTO(userProductFromDB: UserProduct): UserProductDTO {
-    // console.log('createUserProductDTO', userProductFromDB);
     return {
       id: userProductFromDB.id,
-      product: this.productDTOConverter.convertProduct(
-        userProductFromDB.product,
-      ),
+      productId: userProductFromDB.product.id,
       amount: userProductFromDB.amount,
       date: userProductFromDB.date,
       mealTimeType: userProductFromDB.mealTimeType,

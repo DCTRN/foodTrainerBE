@@ -16,10 +16,9 @@ export class UserProductDTO {
   @IsOptional()
   public id?: number;
 
-  // TODO change to productId
-  @ValidateNested({ each: true })
-  @Type(type => ProductDTO)
-  public product: ProductDTO;
+  @IsInt()
+  @Min(1)
+  public productId: number;
 
   @IsNumber()
   @Min(1)

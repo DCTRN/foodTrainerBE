@@ -77,33 +77,8 @@ export const userProduct2: UserProduct = {
   user: user1,
 };
 
-export const productDTOMock1: ProductDTO = {
-  producer: 'producer1',
-  name: 'name1',
-  unit: 'gram',
-  amount: 100,
-  kcal: 300,
-  protein: 20,
-  carbohydrates: 30.5,
-  fats: 11.2,
-  creatorId: 1,
-};
-
-export const productDTOMock2: ProductDTO = {
-  id: 2,
-  producer: 'producer1',
-  name: 'name1',
-  unit: 'gram',
-  amount: 100,
-  kcal: 300,
-  protein: 20,
-  carbohydrates: 30.5,
-  fats: 11.2,
-  creatorId: 1,
-};
-
 export const addUserProductMock1: UserProductDTO = {
-  product: productDTOMock1,
+  productId: 1,
   amount: 100,
   date: new Date('2020-12-0T12:00:00.000Z'),
   mealTimeType: MealEatTimeType.BREAKFAST,
@@ -112,7 +87,7 @@ export const addUserProductMock1: UserProductDTO = {
 
 export const modifyUserProductMock1: UserProductDTO = {
   id: 2,
-  product: productDTOMock2,
+  productId: 2,
   amount: 100,
   date: new Date('2020-12-0T12:00:00.000Z'),
   mealTimeType: MealEatTimeType.BREAKFAST,

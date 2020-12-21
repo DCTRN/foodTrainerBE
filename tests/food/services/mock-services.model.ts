@@ -1,6 +1,5 @@
 import { of } from 'rxjs';
 import {
-  UserProductByDate,
   UserProductDeletion,
   UserProductDTO,
   UserProductModification,

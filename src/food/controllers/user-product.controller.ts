@@ -6,16 +6,13 @@ import {
   HttpCode,
   Patch,
   Post,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import {
-  UserProductByDate,
   UserProductDeletion,
   UserProductDTO,
-  UserProductModification,
   UserProductsByDateDTO,
+  UserProductModification,
   UserProductsByDateRangeDTO,
 } from '../models';
 import { UserProductService } from '../services/user-product.service';
@@ -46,7 +43,6 @@ export class UserProductController {
     @Body(ValidationPipe)
     userProduct: UserProductDTO,
   ): Promise<UserProductDTO> {
-    console.log('addUserProduct', userProduct);
     return await this.userProductService.addUserProduct(userProduct);
   }
 
