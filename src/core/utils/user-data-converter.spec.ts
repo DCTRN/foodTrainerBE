@@ -19,7 +19,7 @@ const userMock: User = {
   hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
-  productCreator: null,
+  products: null,
   userProducts: null,
 };
 
@@ -38,7 +38,7 @@ const userMock2: User = {
   hashPassword: () => {},
   userFriends1: null,
   userFriends2: null,
-  productCreator: null,
+  products: null,
   userProducts: null,
 };
 

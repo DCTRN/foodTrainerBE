@@ -1,35 +1,68 @@
-import { Body, Controller, ValidationPipe } from '@nestjs/common';
-import { of } from 'rxjs';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Patch,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import {
   UserProductByDate,
   UserProductDeletion,
   UserProductDTO,
   UserProductModification,
+  UserProductsByDateDTO,
+  UserProductsByDateRangeDTO,
 } from '../models';
+import { UserProductService } from '../services/user-product.service';
 
 @Controller('userProduct')
+// @UseGuards(JwtAccessAuthGuard)
 export class UserProductController {
-  public addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO> {
-    return of(null).toPromise();
+  constructor(private userProductService: UserProductService) {}
+
+  @Get('findByDate')
+  public async findProductByDate(
+    @Body(ValidationPipe)
+    date: UserProductsByDateDTO,
+  ): Promise<UserProductDTO[]> {
+    return await this.userProductService.findProductByDate(date);
   }
-  public modifyUserProduct(
+
+  @Get('findByDateRange')
+  public async findProductByDateRange(
+    @Body(ValidationPipe)
+    date: UserProductsByDateRangeDTO,
+  ): Promise<UserProductDTO[]> {
+    return await this.userProductService.findProductByDateRange(date);
+  }
+
+  @Post('')
+  public async addUserProduct(
+    @Body(ValidationPipe)
+    userProduct: UserProductDTO,
+  ): Promise<UserProductDTO> {
+    console.log('addUserProduct', userProduct);
+    return await this.userProductService.addUserProduct(userProduct);
+  }
+
+  @Patch('')
+  public async modifyUserProduct(
     @Body(ValidationPipe)
     userProduct: UserProductModification,
   ): Promise<UserProductDTO> {
-    return of(null).toPromise();
+    return await this.userProductService.modifyUserProduct(userProduct);
   }
-  public findProductByDate(date?: Date): Promise<UserProductDTO[]> {
-    return of(null).toPromise();
-  }
-  public findProductByDateRange(
-    start: Date,
-    end?: Date,
-  ): Promise<UserProductByDate[]> {
-    return of(null).toPromise();
-  }
-  public deleteUserProduct(
+
+  @Delete('')
+  @HttpCode(204)
+  public async deleteUserProduct(
     @Body(ValidationPipe) userProduct: UserProductDeletion,
   ): Promise<void> {
-    return of(null).toPromise();
+    return await this.userProductService.deleteUserProduct(userProduct);
   }
 }

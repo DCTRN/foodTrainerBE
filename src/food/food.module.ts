@@ -5,12 +5,18 @@ import { ProductController } from './controllers/product.controller';
 import { UserProductController } from './controllers/user-product.controller';
 import { Product, UserProduct } from './models';
 import { ProductRepositoryService } from './repositories/product-repository.service';
+import { UserProductRepositoryService } from './repositories/user-product-repository.service';
 import { ProductService } from './services/product.service';
 import { UserProductService } from './services/user-product.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product, UserProduct]), UsersModule],
-  providers: [ProductService, UserProductService, ProductRepositoryService],
+  providers: [
+    ProductService,
+    UserProductService,
+    ProductRepositoryService,
+    UserProductRepositoryService,
+  ],
   exports: [ProductService, UserProductService],
   controllers: [ProductController, UserProductController],
 })

@@ -22,7 +22,7 @@ const userMock: User = {
   isActive: true,
   userFriends1: null,
   userFriends2: null,
-  productCreator: null,
+  products: null,
   userProducts: null,
 };
 
@@ -45,7 +45,7 @@ const userMockModified: User = {
   ...userModified,
   userFriends1: null,
   userFriends2: null,
-  productCreator: null,
+  products: null,
   userProducts: null,
 };
 

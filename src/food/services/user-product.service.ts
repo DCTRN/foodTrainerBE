@@ -1,32 +1,109 @@
 import { Injectable } from '@nestjs/common';
 import { of } from 'rxjs';
+import { UsersService } from 'src/users/repositories/users.service';
 import {
+  UserProduct,
   UserProductByDate,
   UserProductDeletion,
   UserProductDTO,
   UserProductModification,
+  UserProductsByDateDTO,
+  UserProductsByDateRangeDTO,
 } from '../models';
+import { UserProductRepositoryService } from '../repositories/user-product-repository.service';
+import { ProductToDTOConverter } from '../utils/product-to-dto-converter';
 
 @Injectable()
 export class UserProductService {
-  public addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO> {
-    return of(null).toPromise();
+  private readonly productDTOConverter: ProductToDTOConverter = new ProductToDTOConverter();
+
+  constructor(
+    private userProductRepositoryService: UserProductRepositoryService,
+    private usersService: UsersService,
+  ) {}
+
+  public async addUserProduct(
+    userProduct: UserProductDTO,
+  ): Promise<UserProductDTO> {
+    await this.throwErrorIfGivenUserDoesNotExists(userProduct.userId);
+    const userProductFromDB = await this.userProductRepositoryService.add(
+      userProduct,
+    );
+    return this.createUserProductDTO(userProductFromDB);
   }
-  public modifyUserProduct(
+
+  public async modifyUserProduct(
     userProduct: UserProductModification,
   ): Promise<UserProductDTO> {
-    return of(null).toPromise();
+    this.throwErrorIfUserIdsDoesNotMatch(userProduct);
+    await this.throwErrorIfGivenUserDoesNotExists(userProduct.userId);
+    // TODO should throw error when given userProduct does not exists
+    const userProductFromDB = await this.userProductRepositoryService.update(
+      userProduct.product,
+    );
+    return this.createUserProductDTO(userProductFromDB);
   }
-  public findProductByDate(date?: Date): Promise<UserProductDTO[]> {
-    return of(null).toPromise();
+
+  public async findProductByDate(
+    date: UserProductsByDateDTO,
+  ): Promise<UserProductDTO[]> {
+    await this.throwErrorIfGivenUserDoesNotExists(date.userId);
+    const userProducts = await this.userProductRepositoryService.findProductByDate(
+      date,
+    );
+    return this.createUserProductsDTO(userProducts);
   }
-  public findProductByDateRange(
-    start: Date,
-    end?: Date,
-  ): Promise<UserProductByDate[]> {
-    return of(null).toPromise();
+
+  public async findProductByDateRange(
+    date: UserProductsByDateRangeDTO,
+  ): Promise<UserProductDTO[]> {
+    await this.throwErrorIfGivenUserDoesNotExists(date.userId);
+    const userProducts = await this.userProductRepositoryService.findProductByDateRange(
+      date,
+    );
+    return this.createUserProductsDTO(userProducts);
   }
-  public deleteUserProduct(userProduct: UserProductDeletion): Promise<void> {
-    return of(null).toPromise();
+
+  public async deleteUserProduct(
+    userProduct: UserProductDeletion,
+  ): Promise<void> {
+    await this.throwErrorIfGivenUserDoesNotExists(userProduct.userId);
+    return this.userProductRepositoryService.delete(userProduct.userProductId);
+  }
+
+  private throwErrorIfUserIdsDoesNotMatch(
+    userProduct: UserProductModification,
+  ): void {
+    if (userProduct.userId !== userProduct.product.userId) {
+      throw new Error('Invalid request. ID doest not match.');
+    }
+  }
+
+  private createUserProductsDTO(userProducts: UserProduct[]): UserProductDTO[] {
+    return userProducts?.map(userProduct =>
+      this.createUserProductDTO(userProduct),
+    );
+  }
+
+  private createUserProductDTO(userProductFromDB: UserProduct): UserProductDTO {
+    // console.log('createUserProductDTO', userProductFromDB);
+    return {
+      id: userProductFromDB.id,
+      product: this.productDTOConverter.convertProduct(
+        userProductFromDB.product,
+      ),
+      amount: userProductFromDB.amount,
+      date: userProductFromDB.date,
+      mealTimeType: userProductFromDB.mealTimeType,
+      userId: userProductFromDB.user.id,
+    };
+  }
+
+  private async throwErrorIfGivenUserDoesNotExists(id: number): Promise<void> {
+    const user = await this.usersService.findById(id);
+    if (user) {
+      return;
+    }
+    throw new Error('Unauthrized operation. User does not exists.');
   }
 }

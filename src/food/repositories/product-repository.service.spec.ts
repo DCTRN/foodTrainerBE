@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { UsersServiceMock } from '@tests/users/services';
 import { of } from 'rxjs';
-import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { User } from 'src/users/models/user/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import {
@@ -124,42 +124,14 @@ class ProductRepositoryMock {
     return of(updateResultMock).toPromise();
   }
 
-  public async find(options?: FindManyOptions<User>): Promise<Array<Product>> {
+  public async find(
+    options?: FindManyOptions<Product>,
+  ): Promise<Array<Product>> {
     return of([null]).toPromise();
   }
 
   public async delete(id: number): Promise<DeleteResult> {
     return of(deleteMock).toPromise();
-  }
-}
-
-export class UsersServiceMock {
-  public async add(user: UserDTO): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async update(id: number, user: Partial<User>): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findById(id: number): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findByUsername(username: string): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findBySimilarToUsername(username: string): Promise<Array<User>> {
-    return of(null).toPromise();
-  }
-
-  public async findAll(): Promise<Array<User>> {
-    return of(null).toPromise();
-  }
-
-  public delete(id: number): Promise<DeleteResult> {
-    return of(null).toPromise();
   }
 }
 

@@ -93,6 +93,17 @@ class UserProductDeletion {
     + userProductId: number
 }
 
+class UserProductsByDateDTO{
+    + userId: number
+    + date: Date
+}
+
+class UserProductsByDateRangeDTO{
+    + userId: number
+    + start: Date
+    + end: Date
+}
+
 class UserProductByDate {
     + date: Date
     + userProducts UserProductDTO[]
@@ -112,17 +123,22 @@ UserProductDTO --* ProductDTO
 class UserProductController {
     + addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO>
     + modifyUserProduct(userProduct: UserProductModification): Promise<UserProductDTO>
-    + findProductByDate(date?: Date): Promise<UserProductDTO[]>
-    + findProductByDateRange(start: Date, end?: Date): Promise<UserProductByDate[]>
+    + findProductByDate(date: UserProductsByDateDTO): Promise<UserProductDTO[]>
+    + findProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProductDTO[]>
     + deleteUserProduct(userProduct: UserProductDeletion): Promise<void>
 }
 UserProductController --> UserProductService
+UserProductController --> UserProductDTO
+UserProductController --> UserProductDeletion
+UserProductController --> UserProductDeletion
+UserProductController --* UserProductsByDateDTO
+UserProductController --* UserProductsByDateRangeDTO
 
 class UserProductService {
     + addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO>
     + modifyUserProduct(userProduct: UserProductModification): Promise<UserProductDTO>
-    + findProductByDate(date?: Date): Promise<UserProductDTO[]>
-    + findProductByDateRange(start: Date, end?: Date): Promise<UserProductByDate[]>
+    + findProductByDate(date: UserProductsByDateDTO): Promise<UserProductDTO[]>
+    + findProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProductDTO[]>
     + deleteUserProduct(userProduct: UserProductDeletion): Promise<void>
 }
 UserProductService --> UserProductRepository
@@ -131,14 +147,18 @@ UserProductService --* UserProductDTO
 UserProductService --* UserProductDeletion
 UserProductService --* UserProductModification
 UserProductService --* UserProductByDate
+UserProductService --* UserProductsByDateDTO
+UserProductService --* UserProductsByDateRangeDTO
 
 class UserProductRepository {
-    + findUserProductByDate(start: Date, end?: Date): Promise<UserProduct[]>
+    + findUserProductByDate(date: UserProductsByDateDTO): Promise<UserProduct[]>
+    + findUserProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProduct[]>
     + add(userProduct: UserProductDTO): Promise<UserProduct>
-    + update(userProduct: UserProduct): Promise<UserProduct>
+    + update(userProduct: UserProductDTO): Promise<UserProduct>
     + delete(id: number): Promise<void>
 }
 UserProductRepository --* UserProduct
+UserProductRepository --* UserProductsByDateDTO
 
 enum MealEatTimeType {
     BREAKFAST

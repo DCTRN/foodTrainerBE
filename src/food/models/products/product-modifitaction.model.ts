@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInstance, IsInt, Min, ValidateNested } from 'class-validator';
+import { IsInt, Min, ValidateNested } from 'class-validator';
 import { ProductDTO } from './product-dto.model';
 
 export class ProductModification {

@@ -1,11 +1,14 @@
+import { Type } from 'class-transformer';
 import {
+  IsDateString,
+  IsEnum,
   IsInt,
   IsNumber,
   IsOptional,
-  IsString,
-  Length,
   Min,
+  ValidateNested,
 } from 'class-validator';
+import { MealEatTimeType, ProductDTO } from '..';
 
 export class UserProductDTO {
   @IsInt()
@@ -13,39 +16,22 @@ export class UserProductDTO {
   @IsOptional()
   public id?: number;
 
-  @IsString()
-  @Length(1, 30)
-  public producer: string;
-
-  @IsString()
-  @Length(1, 30)
-  public name: string;
-
-  @IsString()
-  @Length(1, 30)
-  public unit: string;
+  // TODO change to productId
+  @ValidateNested({ each: true })
+  @Type(type => ProductDTO)
+  public product: ProductDTO;
 
   @IsNumber()
-  @Min(0)
+  @Min(1)
   public amount: number;
 
-  @IsNumber()
-  @Min(0)
-  public kcal: number;
+  @IsDateString()
+  public date: Date;
 
-  @IsNumber()
-  @Min(0)
-  public protein: number;
-
-  @IsNumber()
-  @Min(0)
-  public carbohydrates: number;
-
-  @IsNumber()
-  @Min(0)
-  public fats: number;
+  // @IsEnum(MealEatTimeType)
+  public mealTimeType: MealEatTimeType;
 
   @IsInt()
   @Min(1)
-  public creatorId: number;
+  public userId: number;
 }
