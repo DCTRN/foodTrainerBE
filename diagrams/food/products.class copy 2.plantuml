@@ -1,0 +1,186 @@
+@startuml
+' #ffbb00 - Controller
+' #00b32a - Service
+' #0077ff - Repository
+
+' DATA STRUCTERS
+class User {
+    + id: number
+    + username: string
+    + password: string
+    + email: string
+    + birthDate: Date
+    + phoneNumber: string
+    + firstName: string
+    + lastName: string
+    + accountCreationDate: Date
+    + authenticationLevel: number
+    + isActive: boolean
+    + userFriends1: UserFriends[]
+    + userFriends2: UserFriends[]
+    + products: Product[]
+    + userProducts: UserProduct[]
+}
+
+class ProductDTO {
+    + id?: number
+    + producer: string
+    + name: string
+    + unit: string
+    + amout: number
+    + kcal: number
+    + protein: number
+    + carbohydrates: number
+    + fats: number
+    + creatorId: number
+}
+
+interface ProductModification {
+    + userId: number
+    + product: ProductDTO
+}
+ProductModification --* ProductDTO
+
+interface ProductDeletion {
+    + userId: number
+    + productId: number
+}
+
+class Product {
+    + id: number
+    + producer: string
+    + name: string
+    + unit: string
+    + amount: number
+    + kcal: number
+    + protein: number
+    + carbohydrates: number
+    + fats: number
+    + creator: User
+}
+Product --* User
+
+interface UserProductModification {
+    + userId: number
+    + userProduct: UserProductDTO
+}
+UserProductModification --* UserProductDTO
+
+interface UserProductDeletion {
+    + userId: number
+    + userProductId: number
+}
+
+interface UserProductsByDateDTO{
+    + userId: number
+    + date: Date
+}
+
+interface UserProductsByDateRangeDTO{
+    + userId: number
+    + start: Date
+    + end: Date
+}
+
+class UserProductDTO {
+    + id?: number
+    + productId: number
+    + amount: number
+    + date?: Date
+    + mealTimeType: MealEatTimeType
+    + userId: number
+}
+UserProductDTO --* MealEatTimeType
+
+enum MealEatTimeType {
+    BREAKFAST
+    LUNCH
+    DINNER
+    SUPPER
+}
+
+class UserProduct {
+    + id: number
+    + product: Product
+    + amount: number
+    + date: Date
+    + mealTimeType: MealEatTimeType
+    + user: User
+}
+UserProduct --* User
+UserProduct -left-* Product
+UserProduct --* MealEatTimeType
+
+
+' ' CODE LOGIC
+
+' class ProductController << (C, #ffbb00) Controller >> {
+'     + findProductBy(searchText: string, userId: number): Promise<ProductDTO[]>
+'     + addProduct(product: ProductDTO): Promise<ProductDTO>
+'     + modifyProduct(product: ProductModification): Promise<ProductDTO>
+'     + deleteProduct(product: ProductDeletion): Promise<void>
+' }
+' ProductController --> ProductService
+
+' class UsersRepository << (R, #0077ff) Repository >> {
+'     + async add(user: UserDTO): Promise<User>
+'     +  update(id: number, user: Partial<User>): Promise<User>
+'     +  findById(id: number): Promise<User>
+'     +  findByUsername(username: string): Promise<User>
+'     +  findBySimilarToUsername(username: string): Promise<Array<User>>
+'     +  findAll(): Promise<Array<User>>
+'     + delete(id: number): Promise<DeleteResult>
+' }
+
+' class ProductToDTOConverter {
+'     + convertProductc(product: Product): ProductDTO
+'     + convertProducts(product: Product[]): ProductDTO[]
+' }
+
+' class ProductService << (S, #00b32a) Service >> {
+'     + findProductBy(searchText: string): Promise<ProductDTO[]>
+'     + findProductsByUserId(userId: number): Promise<ProductDTO[]>
+'     + addProduct(product: ProductDTO): Promise<ProductDTO>
+'     + modifyProduct(product: ProductModification): Promise<ProductDTO>
+'     + deleteProduct(product: ProductDeletion): Promise<void>
+' }
+' ProductService --> ProductRepository
+' ProductService --> UsersRepository
+' ProductService -left-> ProductToDTOConverter
+
+' class ProductRepository << (R, #0077ff) Repository >> {
+'     + findProductBy(searchText: string): Promise<Product[]>
+'     + findProductsBy(userId: number): Promise<Product[]>
+'     + add(product: ProductDTO): Promise<Product>
+'     + update(product: ProductDTO): Promise<Product>
+'     + delete(id: number): Promise<void>
+' }
+' ProductRepository -left-> UsersRepository
+
+' class UserProductController << (C, #ffbb00) Controller >> {
+'     + addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO>
+'     + modifyUserProduct(userProduct: UserProductModification): Promise<UserProductDTO>
+'     + findProductByDate(date: UserProductsByDateDTO): Promise<UserProductDTO[]>
+'     + findProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProductDTO[]>
+'     + deleteUserProduct(userProduct: UserProductDeletion): Promise<void>
+' }
+' UserProductController --> UserProductService
+
+' class UserProductService << (S, #00b32a) Service >> {
+'     + addUserProduct(userProduct: UserProductDTO): Promise<UserProductDTO>
+'     + modifyUserProduct(userProduct: UserProductModification): Promise<UserProductDTO>
+'     + findProductByDate(date: UserProductsByDateDTO): Promise<UserProductDTO[]>
+'     + findProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProductDTO[]>
+'     + deleteUserProduct(userProduct: UserProductDeletion): Promise<void>
+' }
+' UserProductService --> UserProductRepository
+' UserProductService --> ProductService
+
+' class UserProductRepository << (R, #0077ff) Repository >> {
+'     + findUserProductByDate(date: UserProductsByDateDTO): Promise<UserProduct[]>
+'     + findUserProductByDateRange(date: UserProductsByDateRangeDTO): Promise<UserProduct[]>
+'     + add(userProduct: UserProductDTO): Promise<UserProduct>
+'     + update(userProduct: UserProductDTO): Promise<UserProduct>
+'     + delete(id: number): Promise<void>
+' }
+@enduml

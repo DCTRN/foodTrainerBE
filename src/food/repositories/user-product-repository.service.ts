@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { of } from 'rxjs';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Between, Repository } from 'typeorm';
 import {
@@ -13,16 +12,15 @@ import { ProductRepositoryService } from './product-repository.service';
 
 @Injectable()
 export class UserProductRepositoryService {
+  private readonly startHour = '00:00:00.000';
+  private readonly endHour = '23:59:59.999';
+
   constructor(
     @InjectRepository(UserProduct)
     private userProductRepository: Repository<UserProduct>,
     private productRepositoryService: ProductRepositoryService,
     private usersService: UsersService,
   ) {}
-
-  private readonly startHour = '00:00:00.000';
-
-  private readonly endHour = '23:59:59.999';
 
   public async findProductByDate(
     date: UserProductsByDateDTO,
@@ -66,7 +64,8 @@ export class UserProductRepositoryService {
     const userProductFromDb = this.userProductRepository.create(
       userProductTemp,
     );
-    return this.userProductRepository.save(userProductFromDb);
+    await this.userProductRepository.save(userProductFromDb);
+    return await this.userProductRepository.findOne(userProduct.id);
   }
 
   public async update(userProduct: UserProductDTO): Promise<UserProduct> {

@@ -7,11 +7,15 @@ import {
   UserProductModification,
   UserProductsByDateDTO,
   UserProductsByDateRangeDTO,
+  UserProductWithProductDTO,
 } from '../models';
 import { UserProductRepositoryService } from '../repositories/user-product-repository.service';
+import { ProductToDTOConverter } from '../utils/product-to-dto-converter';
 
 @Injectable()
 export class UserProductService {
+  private readonly productDTOConverter: ProductToDTOConverter = new ProductToDTOConverter();
+
   constructor(
     private userProductRepositoryService: UserProductRepositoryService,
     private usersService: UsersService,
@@ -19,7 +23,7 @@ export class UserProductService {
 
   public async addUserProduct(
     userProduct: UserProductDTO,
-  ): Promise<UserProductDTO> {
+  ): Promise<UserProductWithProductDTO> {
     await this.throwErrorIfGivenUserDoesNotExists(userProduct.userId);
     const userProductFromDB = await this.userProductRepositoryService.add(
       userProduct,
@@ -29,7 +33,7 @@ export class UserProductService {
 
   public async modifyUserProduct(
     userProduct: UserProductModification,
-  ): Promise<UserProductDTO> {
+  ): Promise<UserProductWithProductDTO> {
     this.throwErrorIfUserIdsDoesNotMatch(userProduct);
     await this.throwErrorIfGivenUserDoesNotExists(userProduct.userId);
     // TODO should throw error when given userProduct does not exists
@@ -41,7 +45,7 @@ export class UserProductService {
 
   public async findProductByDate(
     date: UserProductsByDateDTO,
-  ): Promise<UserProductDTO[]> {
+  ): Promise<UserProductWithProductDTO[]> {
     await this.throwErrorIfGivenUserDoesNotExists(date.userId);
     const userProducts = await this.userProductRepositoryService.findProductByDate(
       date,
@@ -51,7 +55,7 @@ export class UserProductService {
 
   public async findProductByDateRange(
     date: UserProductsByDateRangeDTO,
-  ): Promise<UserProductDTO[]> {
+  ): Promise<UserProductWithProductDTO[]> {
     await this.throwErrorIfGivenUserDoesNotExists(date.userId);
     const userProducts = await this.userProductRepositoryService.findProductByDateRange(
       date,
@@ -74,16 +78,22 @@ export class UserProductService {
     }
   }
 
-  private createUserProductsDTO(userProducts: UserProduct[]): UserProductDTO[] {
+  private createUserProductsDTO(
+    userProducts: UserProduct[],
+  ): UserProductWithProductDTO[] {
     return userProducts?.map(userProduct =>
       this.createUserProductDTO(userProduct),
     );
   }
 
-  private createUserProductDTO(userProductFromDB: UserProduct): UserProductDTO {
+  private createUserProductDTO(
+    userProductFromDB: UserProduct,
+  ): UserProductWithProductDTO {
     return {
       id: userProductFromDB.id,
-      productId: userProductFromDB.product.id,
+      product: this.productDTOConverter.convertProduct(
+        userProductFromDB.product,
+      ),
       amount: userProductFromDB.amount,
       date: userProductFromDB.date,
       mealTimeType: userProductFromDB.mealTimeType,

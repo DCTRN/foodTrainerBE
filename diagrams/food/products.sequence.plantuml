@@ -1,0 +1,43 @@
+@startuml
+' #ffbb00 - auth
+' #00b32a - userFriends
+' #0077ff - products
+' #c700d9 - userProducts
+participant Client  #ffbb00
+
+box "Backend" #00b32a
+participant ProductController #c700d9
+participant ProductService  #0077ff
+participant ProductRepository  #c700d9
+participant DataBase  #0077ff
+end box
+
+alt Valid request
+
+    Client -> ProductController: Add new Product
+    ProductController -> ProductService: Tranfsorm data
+
+    alt Valid data
+
+        ProductService -> ProductRepository: Call db
+        alt Invalid query
+
+            ProductRepository -> DataBase: Save product in database
+
+            DataBase -> ProductRepository: Return newly created product
+            ProductRepository -> ProductService: Return newly created product
+            ProductService -> ProductController: Transform newly created product to DTO
+            ProductController -> Client: Return transformed product
+
+        else Invalid query
+            DataBase -> Client: Throw error
+        end
+
+    else Invalid data
+        ProductService -> Client: Throw error
+    end
+
+else Invalid request
+    ProductController -> Client: Throw error
+end
+@enduml

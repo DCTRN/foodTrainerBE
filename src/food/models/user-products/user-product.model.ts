@@ -1,12 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Product } from '../products/product.model';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../../users/models/user/user.model';
+import { Product } from '../products/product.model';
 import { MealEatTimeType } from './meal-eat-time-type.enum';
 
 @Entity()

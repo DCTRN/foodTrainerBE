@@ -1,21 +1,23 @@
+import { Type } from 'class-transformer';
 import {
   IsDateString,
   IsInt,
   IsNumber,
   IsOptional,
   Min,
+  ValidateNested,
 } from 'class-validator';
-import { MealEatTimeType } from '..';
+import { MealEatTimeType, ProductDTO } from '..';
 
-export class UserProductDTO {
+export class UserProductWithProductDTO {
   @IsInt()
   @Min(1)
   @IsOptional()
   public id?: number;
 
-  @IsInt()
-  @Min(1)
-  public productId: number;
+  @ValidateNested({ each: true })
+  @Type(type => ProductDTO)
+  public product: ProductDTO;
 
   @IsNumber()
   @Min(1)

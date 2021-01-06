@@ -85,7 +85,7 @@ describe('UserProductService', () => {
 
     expect(userProductRepositoryService.add).toHaveBeenCalled();
     expect(userProductDTO.id).toEqual(userProduct1.id);
-    expect(userProductDTO.productId).toEqual(userProduct1.product.id);
+    expect(userProductDTO.product.id).toEqual(userProduct1.product.id);
     expect(userProductDTO.userId).toEqual(userProduct1.user.id);
   });
 
@@ -141,7 +141,7 @@ describe('UserProductService', () => {
 
     expect(userProductRepositoryService.update).toHaveBeenCalled();
     expect(userProductDTO.id).toEqual(modifyProductMock1.product.id);
-    expect(userProductDTO.productId).toEqual(
+    expect(userProductDTO.product.id).toEqual(
       modifyProductMock1.product.productId,
     );
     expect(userProductDTO.userId).toEqual(modifyProductMock1.userId);
@@ -160,7 +160,7 @@ describe('UserProductService', () => {
     expect(userProductRepositoryService.findProductByDate).toHaveBeenCalled();
     expect(userProductsDTO.length).toEqual(1);
     expect(userProductsDTO[0].id).toEqual(userProduct1.product.id);
-    expect(userProductsDTO[0].productId).toEqual(userProduct1.product.id);
+    expect(userProductsDTO[0].product.id).toEqual(userProduct1.product.id);
     expect(userProductsDTO[0].userId).toEqual(userProduct1.user.id);
   });
 
@@ -196,7 +196,7 @@ describe('UserProductService', () => {
     ).toHaveBeenCalled();
     expect(userProductsDTO.length).toEqual(1);
     expect(userProductsDTO[0].id).toEqual(userProduct1.product.id);
-    expect(userProductsDTO[0].productId).toEqual(userProduct1.product.id);
+    expect(userProductsDTO[0].product.id).toEqual(userProduct1.product.id);
     expect(userProductsDTO[0].userId).toEqual(userProduct1.user.id);
   });
 

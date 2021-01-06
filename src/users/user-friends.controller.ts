@@ -18,7 +18,7 @@ import { UserfriendsWithoutSensitiveData } from './models/user-friends/user-frie
 import { UserFriendsHandlerService } from './services/user-friends-handler.service';
 
 @Controller('userFriends')
-// @UseGuards(JwtAccessAuthGuard)
+@UseGuards(JwtAccessAuthGuard)
 export class UserFriendsController {
   constructor(private userFriendsHandlerService: UserFriendsHandlerService) {}
   @Get('')

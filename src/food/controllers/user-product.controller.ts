@@ -6,14 +6,17 @@ import {
   HttpCode,
   Patch,
   Post,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import {
   UserProductDeletion,
   UserProductDTO,
-  UserProductsByDateDTO,
   UserProductModification,
+  UserProductsByDateDTO,
   UserProductsByDateRangeDTO,
+  UserProductWithProductDTO,
 } from '../models';
 import { UserProductService } from '../services/user-product.service';
 
@@ -26,7 +29,7 @@ export class UserProductController {
   public async findProductByDate(
     @Body(ValidationPipe)
     date: UserProductsByDateDTO,
-  ): Promise<UserProductDTO[]> {
+  ): Promise<UserProductWithProductDTO[]> {
     return await this.userProductService.findProductByDate(date);
   }
 
@@ -34,7 +37,7 @@ export class UserProductController {
   public async findProductByDateRange(
     @Body(ValidationPipe)
     date: UserProductsByDateRangeDTO,
-  ): Promise<UserProductDTO[]> {
+  ): Promise<UserProductWithProductDTO[]> {
     return await this.userProductService.findProductByDateRange(date);
   }
 
@@ -42,7 +45,7 @@ export class UserProductController {
   public async addUserProduct(
     @Body(ValidationPipe)
     userProduct: UserProductDTO,
-  ): Promise<UserProductDTO> {
+  ): Promise<UserProductWithProductDTO> {
     return await this.userProductService.addUserProduct(userProduct);
   }
 
@@ -50,7 +53,7 @@ export class UserProductController {
   public async modifyUserProduct(
     @Body(ValidationPipe)
     userProduct: UserProductModification,
-  ): Promise<UserProductDTO> {
+  ): Promise<UserProductWithProductDTO> {
     return await this.userProductService.modifyUserProduct(userProduct);
   }
 
