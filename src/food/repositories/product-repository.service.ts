@@ -26,10 +26,6 @@ export class ProductRepositoryService {
     });
   }
 
-  public async findById(id: number): Promise<Product> {
-    return await this.productRepository.findOne(id);
-  }
-
   public async add(product: ProductDTO): Promise<Product> {
     const user = await this.usersService.findById(product.creatorId);
     const partialProduct: Partial<Product> = { ...product };
@@ -41,13 +37,16 @@ export class ProductRepositoryService {
 
   public async update(product: ProductDTO): Promise<Product> {
     const entity = await this.updateProductEntity(product);
-    // TODO may need improvemennt
     return await this.productRepository.save(entity);
   }
 
   public async delete(id: number): Promise<void> {
     await this.productRepository.delete(id);
     return;
+  }
+
+  public async findById(id: number): Promise<Product> {
+    return await this.productRepository.findOne(id);
   }
 
   private async updateProductEntity(product: ProductDTO): Promise<Product> {

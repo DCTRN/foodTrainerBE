@@ -90,6 +90,9 @@
       "tests/(.*)": "<rootDir>/tests/$1"
     },
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "src/users/models"
+    ]
   }
 }

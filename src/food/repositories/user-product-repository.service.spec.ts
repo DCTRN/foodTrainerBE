@@ -137,9 +137,7 @@ describe('UserProductRepositoryService', () => {
 
     expect(usersService.findById).toHaveBeenCalled();
     expect(productRepositoryService.findById).toHaveBeenCalled();
-
     expect(userProductRepository.create).toHaveBeenCalled();
-    expect(userProductRepository.findOne).toHaveBeenCalled();
     expect(userProductRepository.save).toHaveBeenCalled();
   });
 

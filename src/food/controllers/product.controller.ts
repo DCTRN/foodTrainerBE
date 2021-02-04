@@ -8,18 +8,18 @@ import {
   Post,
   Query,
   UseGuards,
-  ValidationPipe
+  ValidationPipe,
 } from '@nestjs/common';
 import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import {
   ProductDeletion,
   ProductDTO,
-  ProductModification
+  ProductModification,
 } from 'src/food/models';
 import { ProductService } from '../services/product.service';
 
 @Controller('product')
-// @UseGuards(JwtAccessAuthGuard)
+@UseGuards(JwtAccessAuthGuard)
 export class ProductController {
   constructor(private productService: ProductService) {}
 

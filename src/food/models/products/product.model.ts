@@ -1,12 +1,10 @@
 import {
   Column,
   Entity,
-
   ManyToOne,
   OneToMany,
-
   PrimaryGeneratedColumn,
-  Unique
+  Unique,
 } from 'typeorm';
 import { User } from '../../../users/models/user/user.model';
 import { UserProduct } from '../user-products/user-product.model';

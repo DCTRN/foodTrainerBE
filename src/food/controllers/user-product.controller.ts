@@ -25,7 +25,7 @@ import { UserProductService } from '../services/user-product.service';
 export class UserProductController {
   constructor(private userProductService: UserProductService) {}
 
-  @Get('findByDate')
+  @Post('findByDate')
   public async findProductByDate(
     @Body(ValidationPipe)
     date: UserProductsByDateDTO,
@@ -33,7 +33,7 @@ export class UserProductController {
     return await this.userProductService.findProductByDate(date);
   }
 
-  @Get('findByDateRange')
+  @Post('findByDateRange')
   public async findProductByDateRange(
     @Body(ValidationPipe)
     date: UserProductsByDateRangeDTO,

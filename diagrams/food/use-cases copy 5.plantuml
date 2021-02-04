@@ -1,0 +1,23 @@
+@startuml
+' #f2e600 - raports
+
+' Actors declarations
+actor Użytkownik as U
+
+' UseCases declarations
+' Raports use cases declarations
+"Wyświetl podsumowanie" as (DisplaySummary) #f2e600
+"Wyświetl podsumowanie makroskładników" as (DisplayMacroIngredients) #f2e600
+"Wyświetl podsumowanie kaloryczne" as (DisplayCalories) #f2e600
+"Filtruj wyświetlane podsumowanie po dacie" as (FilterSummaryByDate) #f2e600
+
+' Raports use cases
+U -up- DisplaySummary
+U -right- DisplayMacroIngredients
+U -left- DisplayCalories
+U -down- FilterSummaryByDate
+
+DisplayMacroIngredients .up.> DisplaySummary
+DisplayCalories .up.>  DisplaySummary
+
+@enduml

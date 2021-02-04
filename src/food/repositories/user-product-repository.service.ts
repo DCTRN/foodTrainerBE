@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AsyncSubject, ReplaySubject } from 'rxjs';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Between, Repository } from 'typeorm';
 import {
@@ -53,7 +54,7 @@ export class UserProductRepositoryService {
 
   public async add(userProduct: UserProductDTO): Promise<UserProduct> {
     const product = await this.productRepositoryService.findById(
-      userProduct.id,
+      userProduct.productId,
     );
     const user = await this.usersService.findById(userProduct.userId);
     const userProductTemp: Partial<UserProduct> = {
@@ -64,8 +65,7 @@ export class UserProductRepositoryService {
     const userProductFromDb = this.userProductRepository.create(
       userProductTemp,
     );
-    await this.userProductRepository.save(userProductFromDb);
-    return await this.userProductRepository.findOne(userProduct.id);
+    return await this.userProductRepository.save(userProductFromDb);
   }
 
   public async update(userProduct: UserProductDTO): Promise<UserProduct> {

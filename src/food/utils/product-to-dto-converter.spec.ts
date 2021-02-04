@@ -110,6 +110,7 @@ const validProductDTOMock2: ProductDTO = {
 };
 
 // TODO check
+
 describe('ProductToDtoconverter', () => {
   it('should be defined', () => {
     expect(new ProductToDTOConverter()).toBeDefined();
@@ -117,6 +118,7 @@ describe('ProductToDtoconverter', () => {
 
   it('should translate product successfully', () => {
     const productToDtoconverter = new ProductToDTOConverter();
+
     const productDTO = productToDtoconverter.convertProduct(productMock1);
 
     expect(isEqual(productDTO, validProductDTOMock1)).toEqual(true);
@@ -131,13 +133,13 @@ describe('ProductToDtoconverter', () => {
   //   }
   // });
 
-  // it('should translate products successfully', () => {
-  //   const products = [productMock1, productMock2];
-  //   const expedtecProductsDTO = [validProductDTOMock1, validProductDTOMock2];
-  //   const productToDtoconverter = new ProductToDTOConverter();
-  //   const producstDTO = productToDtoconverter.convertProducts(products);
+  it('should translate products successfully', () => {
+    const products = [productMock1, productMock2];
+    const expedtecProductsDTO = [validProductDTOMock1, validProductDTOMock2];
+    const productToDtoconverter = new ProductToDTOConverter();
+    const producstDTO = productToDtoconverter.convertProducts(products);
 
-  //   expect(producstDTO.length).toEqual(2);
-  //   expect(isEqual(producstDTO, expedtecProductsDTO)).toEqual(true);
-  // });
+    expect(producstDTO.length).toEqual(2);
+    expect(isEqual(producstDTO, expedtecProductsDTO)).toEqual(true);
+  });
 });

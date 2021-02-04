@@ -4,74 +4,24 @@
 ' #0077ff - products
 ' #c700d9 - userProducts
 ' Actors declarations
-actor User as U
+actor Użytkownik as U
 
 ' UseCases declarations
 
-' ' Auth use cases declarations
-' "Register to application" as (Registration) #ffbb00
-' "Login to application" as (Login) #ffbb00
-' "Logout from application" as (Logout) #ffbb00
-
-' ' UserFriends use cases declarations
-' "Find users" as (FindUsers) #00b32a
-' "Send friend request" as (SendFriendRequest) #00b32a
-' "Accept friend request" as (AcceptFriendRequest) #00b32a
-' "Cancel friend request" as (CancelFriendRequest) #00b32a
-' "Refuse friend request" as (RefuseFriendRequest) #00b32a
-' "Delete friend" as (DeleteFriend) #00b32a
-' "Display friends list" as (DisplayFriendsList) #00b32a
-
 ' Product use cases declarations
-"Find product" as (FinProduct) #0077ff
-"Add new product" as (AddNewProduct) #0077ff
-"Modify product" as (ModifyProduct) #0077ff
-"Delete Product" as (DeleteProduct) #0077ff
-"Display user products" as (DisplayUserProducts) #0077ff
-
-' ' UserProduct use cases declarations
-' "Add product to diary " as (AddProductToDiary) #c700d9
-' "Modify entry" as (ModifyEntry) #c700d9
-' "Delete entry" as (DeleteEntry) #c700d9
-' "Display products entries by date" as (DisplayProductEntriesByDate) #c700d9
-' "Show entries chart by date" as (ShowEntriesChartByDate) #c700d9
-
-' ' Auth use cases
-' U -- Registration
-' U -- Login
-' U -- Logout
-
-' ' UserFriends use cases
-' U -- FindUsers
-
-' U -- SendFriendRequest
-
-' CancelFriendRequest .down.> SendFriendRequest : extend
-' U -- CancelFriendRequest
-
-' RefuseFriendRequest .down.> SendFriendRequest : extend
-' U -- RefuseFriendRequest
-
-
-' AcceptFriendRequest .down.> SendFriendRequest : extend
-' U -- AcceptFriendRequest
-
-' U -- DisplayFriendsList
-
-' U -- DeleteFriend
+"Znajdź produkt" as (FinProduct) #0077ff
+"Dodaj produkt" as (AddNewProduct) #0077ff
+"Zmodyfikuj produkt" as (ModifyProduct) #0077ff
+"Usuń produkt" as (DeleteProduct) #0077ff
+"Wyświetl produkty użytkownika" as (DisplayUserProducts) #0077ff
+"Filtruj produkty użytkownika" as (FilterUserProducts) #0077ff
 
 ' Product use casess
-U -left- FinProduct
+U -up- FinProduct
 U -left- AddNewProduct
-U -left- ModifyProduct
-U -left- DeleteProduct
-U -left- DisplayUserProducts
-
-' ' UserProduct use cases
-' U -right- AddProductToDiary
-' U -right- ModifyEntry
-' U -right- DeleteEntry
-' U -right- DisplayProductEntriesByDate
-' U -right- ShowEntriesChartByDate
+U -down- ModifyProduct
+U -down- DeleteProduct
+U -right- FilterUserProducts
+U -right- DisplayUserProducts
 
 @enduml
