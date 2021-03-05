@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Like, Repository } from 'typeorm';
 import { UserDTO } from '../models/user/user-dto.model';
 import { User } from '../models/user/user.model';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -13,11 +14,17 @@ export class UsersService {
 
   public async add(user: UserDTO): Promise<User> {
     const dbUser = this.userRepository.create(user);
+    dbUser.password = bcrypt.hashSync(dbUser.password, 10);
     return this.userRepository.save(dbUser);
   }
 
   public async update(id: number, user: Partial<User>): Promise<User> {
     const u = await this.updateEntityValues(id, user);
+    // TODO test this line
+    if (user?.password) {
+      u.password = bcrypt.hashSync(u.password, 10);
+    }
+    console.log('after update', u);
     await this.userRepository.save(u);
     return this.findById(id);
   }
@@ -53,8 +60,10 @@ export class UsersService {
 
   private async updateEntityValues(id: number, user: Partial<User>) {
     const u = await this.findById(id);
+    console.log('user before update', u);
     Object.keys(user).forEach((key: string) => {
-      u[key] = user[key];
+      const modifiedValue = user[key];
+      u[key] = modifiedValue;
     });
     return u;
   }

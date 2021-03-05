@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AsyncSubject, ReplaySubject } from 'rxjs';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Between, Repository } from 'typeorm';
 import {

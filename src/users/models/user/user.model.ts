@@ -52,8 +52,6 @@ export class User {
   @Column({ default: true })
   public isActive: boolean;
 
-  @BeforeInsert()
-  @BeforeUpdate()
   public hashPassword(): void {
     this.password = bcrypt.hashSync(this.password, 10);
   }
