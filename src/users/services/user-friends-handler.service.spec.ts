@@ -1,73 +1,19 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Injectable } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { user1, user2, user3 } from '@tests/users/mock-data.model';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
 import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
 import { IUserFriends } from '../models/user-friends/user-friends.interface';
 import { UserFriends } from '../models/user-friends/user-friends.model';
-import { UserDTO } from '../models/user/user-dto.model';
 import { User } from '../models/user/user.model';
 import { UserFriendsService } from '../repositories/user-friends.repository.service';
-import { UsersService } from '../repositories/users.service';
 import { UserFriendsHandlerService } from './user-friends-handler.service';
 
-const userMock: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const friendMock1: User = {
-  id: 2,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const friendMock2: User = {
-  id: 3,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
+const userMock: User = user1;
+const friendMock1: User = user2;
+const friendMock2: User = user3;
 
 const userFriendsMock: UserFriends[] = [
   {
@@ -132,37 +78,9 @@ export class UserFriendsServiceMock {
   }
 }
 
-@Injectable()
-export class UsersServiceMock {
-  public async add(user: UserDTO): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async update(id: number, user: Partial<User>): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findById(id: number): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findByUsername(username: string): Promise<User> {
-    return of(null).toPromise();
-  }
-
-  public async findAll(): Promise<Array<User>> {
-    return of(null).toPromise();
-  }
-
-  public delete(id: number): Promise<DeleteResult> {
-    return of(null).toPromise();
-  }
-}
-
 describe('UserFriendsHandlerService', () => {
   let service: UserFriendsHandlerService;
   let userFriendsService: UserFriendsService;
-  let usersService: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -172,16 +90,11 @@ describe('UserFriendsHandlerService', () => {
           provide: UserFriendsService,
           useClass: UserFriendsServiceMock,
         },
-        {
-          provide: UsersService,
-          useClass: UsersServiceMock,
-        },
       ],
     }).compile();
 
     service = module.get<UserFriendsHandlerService>(UserFriendsHandlerService);
     userFriendsService = module.get<UserFriendsService>(UserFriendsService);
-    usersService = module.get<UsersService>(UsersService);
   });
 
   it('should be defined', () => {
@@ -192,10 +105,6 @@ describe('UserFriendsHandlerService', () => {
     const findUserFriendsByUserIdSpy = jest
       .spyOn(userFriendsService, 'findByUserId')
       .mockReturnValue(of(userFriendsMock).toPromise());
-
-    jest
-      .spyOn(usersService, 'findById')
-      .mockReturnValue(of(friendMock1).toPromise());
 
     const userFriends = await service.getAllUserFriendsByUserIds(1);
 

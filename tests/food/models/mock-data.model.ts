@@ -2,7 +2,6 @@
 import {
   MealEatTimeType,
   Product,
-  ProductDTO,
   UserProduct,
   UserProductDeletion,
   UserProductDTO,
@@ -11,25 +10,9 @@ import {
   UserProductsByDateRangeDTO,
 } from 'src/food/models';
 import { User } from 'src/users/models/user/user.model';
+import { user1 as u1 } from '../../users/mock-data.model';
 
-export const user1: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date('2020-12-0T12:00:00.000Z'),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date('2020-12-0T12:00:00.000Z'),
-  hashPassword: () => {},
-  authenticationLevel: 1,
-  isActive: true,
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
+export const user1: User = u1;
 
 export const product1: Product = {
   id: 1,

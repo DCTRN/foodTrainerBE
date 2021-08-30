@@ -1,29 +1,42 @@
-import { IsDateString, IsEmail, IsString, Length } from 'class-validator';
+import {
+  IsDateString,
+  IsEmail,
+  IsOptional,
+  IsString,
+  Length,
+  ValidateNested,
+} from 'class-validator';
+import { UserDetailsDTO } from './user-details-dto.model';
 
 export class UserDTO {
   @IsString()
   @Length(3, 20)
-  username: string;
+  public username: string;
 
+  // TODO this should me optional but the API model with FE works with this mandatory - to check
+  @IsOptional()
   @IsString()
   @Length(6, 30)
-  password: string;
+  public password?: string;
 
   @IsEmail()
-  email: string;
+  public email: string;
 
   @IsDateString()
-  birthDate: Date;
+  public birthDate: Date;
 
   @IsString()
   @Length(9)
-  phoneNumber: string;
+  public phoneNumber: string;
 
   @IsString()
   @Length(3, 20)
-  firstName: string;
+  public firstName: string;
 
   @IsString()
   @Length(3, 20)
-  lastName: string;
+  public lastName: string;
+
+  @ValidateNested()
+  public details: UserDetailsDTO;
 }

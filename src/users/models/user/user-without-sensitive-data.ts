@@ -1,10 +1,15 @@
+import { UserDetails } from './user-details.model';
+import { UserNutritionGoals } from './user-nutrition-goals.model';
+
 export class UserWithoutSensitiveData {
-  id: number;
-  username: string;
-  email: string;
-  birthDate: Date;
-  phoneNumber: string;
-  firstName: string;
-  lastName: string;
-  authenticationLevel: number;
+  public id: number;
+  public username: string;
+  public email: string;
+  public birthDate: Date;
+  public phoneNumber: string;
+  public firstName: string;
+  public lastName: string;
+  public authenticationLevel: number;
+  public nutritionGoals: Omit<UserNutritionGoals, 'user'>;
+  public details: Omit<UserDetails, 'user'>;
 }

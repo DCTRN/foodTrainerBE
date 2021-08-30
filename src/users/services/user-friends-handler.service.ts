@@ -1,22 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { UserDataConverter } from 'src/core/utils/user-data-converter';
-import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
-import { UserFriends } from '../models/user-friends/user-friends.model';
-import { UserWithoutSensitiveData } from '../models/user/user-without-sensitive-data';
-import { User } from '../models/user/user.model';
-import { UserfriendWithoutSensitiveData } from '../models/user-friends/user-friend-with-user-data.model';
-import { UserFriendsService } from '../repositories/user-friends.repository.service';
-import { UsersService } from '../repositories/users.service';
-import { UserfriendsWithoutSensitiveData } from '../models/user-friends/user-friends-without-sensitive-data.model';
 import { DeleteResult } from 'typeorm';
+import { UserfriendWithoutSensitiveData } from '../models/user-friends/user-friend-with-user-data.model';
+import { UserFriendsDTO } from '../models/user-friends/user-friends-dto.model';
+import { UserfriendsWithoutSensitiveData } from '../models/user-friends/user-friends-without-sensitive-data.model';
+import { UserFriends } from '../models/user-friends/user-friends.model';
+import { UserFriendsService } from '../repositories/user-friends.repository.service';
 
 @Injectable()
 export class UserFriendsHandlerService {
   private userDataConverter = new UserDataConverter();
-  constructor(
-    private userFriendsService: UserFriendsService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private userFriendsService: UserFriendsService) {}
 
   public async getAllUserFriendsByUserIds(
     userId: number,
@@ -78,23 +72,5 @@ export class UserFriendsHandlerService {
 
   private getuserFriend(f: UserFriends, userId: number) {
     return Number(f.friend.id) === Number(userId) ? f.user : f.friend;
-  }
-
-  private trimUserFriendsSensitiveData(
-    userFriendsData: User[],
-  ): UserWithoutSensitiveData[] {
-    return this.userDataConverter.trimUsersSensitiveData(userFriendsData);
-  }
-
-  private async getUserFriendsData(
-    userFriends: UserFriends[],
-    userFriendsData: User[],
-  ) {
-    for (const userFriend of userFriends) {
-      const friendsData = await this.usersService.findById(
-        userFriend.friend.id,
-      );
-      userFriendsData.push(friendsData);
-    }
   }
 }

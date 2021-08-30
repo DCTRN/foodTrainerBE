@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
+import { userDTO1, userFromDb1 } from '@tests/users/mock-data.model';
 import { of } from 'rxjs';
 import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { User } from 'src/users/models/user/user.model';
@@ -12,35 +12,6 @@ import { DeleteResult, Repository } from 'typeorm';
 import { AuthService } from './auth.service';
 import { DecodedToken } from './models/decoded-token.model';
 import { Tokens } from './models/tokens.model';
-
-const userMock: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const userDTOMock: UserDTO = {
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-};
 
 const deleteMock: DeleteResult = {
   raw: null,
@@ -119,25 +90,6 @@ export class JwtServiceMock {
   }
 }
 
-const userFromDbMock: User = {
-  id: 1,
-  username: 'username',
-  password: bcrypt.hashSync('password', 10),
-  email: 'email',
-  birthDate: new Date(),
-  accountCreationDate: new Date(),
-  phoneNumber: '111222333',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  authenticationLevel: 1,
-  hashPassword: jest.fn(),
-  isActive: true,
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
@@ -174,9 +126,7 @@ describe('AuthService', () => {
   it('should validate user', async () => {
     const findByUsernameSpy = jest
       .spyOn(usersService, 'findByUsername')
-      .mockImplementation(
-        () => new Promise(resolve => resolve(userFromDbMock)),
-      );
+      .mockImplementation(() => new Promise(resolve => resolve(userFromDb1)));
 
     ((usersService as unknown) as UsersServiceMock).setReturnedValue(null);
     const errorResult = await service.validateUser(
@@ -187,10 +137,10 @@ describe('AuthService', () => {
     expect(errorResult).toBeFalsy();
 
     ((usersService as unknown) as UsersServiceMock).setReturnedValue(
-      userFromDbMock,
+      userFromDb1,
     );
     const successResult = await service.validateUser(
-      userFromDbMock.username,
+      userFromDb1.username,
       'password',
     );
     expect(findByUsernameSpy).toHaveBeenCalledTimes(2);
@@ -204,8 +154,8 @@ describe('AuthService', () => {
       successfulLoginMock.access_token,
     );
     const loginReslut = await service.login({
-      username: userMock.username,
-      password: userMock.password,
+      username: userFromDb1.username,
+      password: userFromDb1.password,
     });
     expect(signSpy).toHaveBeenCalledTimes(2);
     expect(loginReslut.access_token).toEqual(successfulLoginMock.access_token);
@@ -232,11 +182,11 @@ describe('AuthService', () => {
     const addSpy = jest.spyOn(usersService, 'add').mockImplementation(
       () =>
         new Promise(resolve => {
-          resolve(userFromDbMock);
+          resolve(userFromDb1);
         }),
     );
 
-    await service.register(userDTOMock);
+    await service.register(userDTO1);
 
     expect(addSpy).toHaveBeenCalled();
   });

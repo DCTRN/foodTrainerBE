@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { UserDataConverter } from 'src/core/utils/user-data-converter';
 import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { UserLoginCredentials } from 'src/users/models/user/user-login-credentials.model';
 import { UserWithoutSensitiveData } from 'src/users/models/user/user-without-sensitive-data';
@@ -11,6 +12,7 @@ import { Tokens } from './models/tokens.model';
 
 @Injectable()
 export class AuthService {
+  private userDataConverter = new UserDataConverter();
   private readonly expiresInTime = 300;
 
   constructor(
@@ -63,17 +65,8 @@ export class AuthService {
 
   public async register(user: UserDTO): Promise<UserWithoutSensitiveData> {
     const u = await this.usersService.add(user);
-    const userWithoutSensitiveData: UserWithoutSensitiveData = {
-      id: u.id,
-      username: u.username,
-      email: u.email,
-      birthDate: u.birthDate,
-      phoneNumber: u.phoneNumber,
-      firstName: u.firstName,
-      lastName: u.lastName,
-      authenticationLevel: u.authenticationLevel,
-    };
-    return userWithoutSensitiveData;
+    // TODO test with additional fields
+    return this.userDataConverter.trimUserSensitiveData(u);
   }
 
   private generateRefreshToken(payload: UserLoginCredentials) {

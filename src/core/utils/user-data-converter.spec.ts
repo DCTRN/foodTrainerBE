@@ -1,58 +1,24 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 
+import { user1 } from '@tests/users/mock-data.model';
 import { UserWithoutSensitiveData } from '../../users/models/user/user-without-sensitive-data';
 import { User } from '../../users/models/user/user.model';
 import { UserDataConverter } from './user-data-converter';
+import { isEqual } from 'lodash';
 
-const userMock: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
+const usersMock: Array<User> = [user1, user1];
 
-const userMock2: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const usersMock: Array<User> = [userMock, userMock2];
-
-const userWithousSensitiveDataMock: UserWithoutSensitiveData = {
+const userWithoutSensitiveDataMock: UserWithoutSensitiveData = {
   id: 1,
   username: 'usernameMock',
   email: 'someemail@gmail.com',
-  birthDate: new Date(),
+  birthDate: null,
   phoneNumber: '123123123',
   firstName: 'firstName',
   lastName: 'lastName',
   authenticationLevel: 1,
+  nutritionGoals: { id: 1, kcal: 3000, protein: 25, carbs: 50, fats: 25 },
+  details: { id: 1, age: 30, height: 180, weight: 75, sex: 'MALE' },
 };
 
 describe('UserDataConverter', () => {
@@ -64,10 +30,10 @@ describe('UserDataConverter', () => {
     const userDataConverter = new UserDataConverter();
 
     const userWithoutSensitiveData = userDataConverter.trimUserSensitiveData(
-      userMock,
+      user1,
     );
 
-    expect(userWithoutSensitiveData).toBeTruthy();
+    expect(isEqual(userWithoutSensitiveData, userWithoutSensitiveDataMock));
     expect((userWithoutSensitiveData as User)?.password).toBeFalsy();
   });
 
@@ -78,8 +44,8 @@ describe('UserDataConverter', () => {
       usersMock,
     );
 
-    expect(usersWithoutSensitiveData).toBeTruthy();
-    expect(usersWithoutSensitiveData.length).toEqual(2);
+    expect(isEqual(usersWithoutSensitiveData[0], userWithoutSensitiveDataMock));
+    expect(isEqual(usersWithoutSensitiveData[1], userWithoutSensitiveDataMock));
     expect((usersWithoutSensitiveData[0] as User)?.password).toBeFalsy();
     expect((usersWithoutSensitiveData[1] as User)?.password).toBeFalsy();
   });

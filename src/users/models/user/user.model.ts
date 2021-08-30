@@ -1,18 +1,19 @@
 import * as bcrypt from 'bcrypt';
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { Product } from '../../../food/models/products/product.model';
-import { UserFriends } from '../user-friends/user-friends.model';
 import { UserProduct } from '../../../food/models/user-products/user-product.model';
+import { UserFriends } from '../user-friends/user-friends.model';
+import { UserDetails } from './user-details.model';
+import { UserNutritionGoals } from './user-nutrition-goals.model';
 
 @Entity()
 export class User {
@@ -79,4 +80,24 @@ export class User {
     userProduct => userProduct.user,
   )
   public userProducts: UserProduct[];
+
+  @OneToOne(
+    type => UserNutritionGoals,
+    userNutritionGoals => userNutritionGoals.user,
+    {
+      cascade: true,
+    },
+  )
+  @JoinColumn()
+  public nutritionGoals: UserNutritionGoals;
+
+  @OneToOne(
+    type => UserDetails,
+    userDetails => userDetails.user,
+    {
+      cascade: true,
+    },
+  )
+  @JoinColumn()
+  public details: UserDetails;
 }

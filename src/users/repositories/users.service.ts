@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { DeleteResult, Like, Repository } from 'typeorm';
 import { UserDTO } from '../models/user/user-dto.model';
+import { UserWithNutritionGoalsDTO } from '../models/user/user-with-nurition-goals-dto.model';
 import { User } from '../models/user/user.model';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -18,13 +19,15 @@ export class UsersService {
     return this.userRepository.save(dbUser);
   }
 
-  public async update(id: number, user: Partial<User>): Promise<User> {
+  public async update(
+    id: number,
+    user: Partial<UserWithNutritionGoalsDTO>,
+  ): Promise<User> {
     const u = await this.updateEntityValues(id, user);
     // TODO test this line
     if (user?.password) {
       u.password = bcrypt.hashSync(u.password, 10);
     }
-    console.log('after update', u);
     await this.userRepository.save(u);
     return this.findById(id);
   }
@@ -34,8 +37,10 @@ export class UsersService {
   }
 
   public async findByUsername(username: string): Promise<User> {
+    // TODO test with new fields
     const users = await this.userRepository.find({
       where: { username },
+      relations: ['nutritionGoals', 'details'],
     });
 
     if (!users?.length) {
@@ -47,20 +52,27 @@ export class UsersService {
   public async findBySimilarToUsername(username: string): Promise<Array<User>> {
     return await this.userRepository.find({
       where: { username: Like(`%${username}%`) },
+      // TODO test with new fields
+      relations: ['nutritionGoals', 'details'],
     });
   }
 
   public async findAll(): Promise<Array<User>> {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      // TODO test with new fields
+      relations: ['nutritionGoals', 'details'],
+    });
   }
 
   public delete(id: number): Promise<DeleteResult> {
     return this.userRepository.delete(id);
   }
 
-  private async updateEntityValues(id: number, user: Partial<User>) {
+  private async updateEntityValues(
+    id: number,
+    user: Partial<UserWithNutritionGoalsDTO>,
+  ) {
     const u = await this.findById(id);
-    console.log('user before update', u);
     Object.keys(user).forEach((key: string) => {
       const modifiedValue = user[key];
       u[key] = modifiedValue;

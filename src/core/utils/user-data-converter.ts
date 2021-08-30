@@ -1,9 +1,25 @@
+import { UserDetails } from 'src/users/models/user/user-details.model';
+import { UserNutritionGoals } from 'src/users/models/user/user-nutrition-goals.model';
 import { UserWithoutSensitiveData } from 'src/users/models/user/user-without-sensitive-data';
 import { User } from 'src/users/models/user/user.model';
 
 export class UserDataConverter {
+  // TODO test with additional fields
   public trimUserSensitiveData(user: User): UserWithoutSensitiveData {
-    const userWithoutSensitiveData: UserWithoutSensitiveData = {
+    const userWithoutSensitiveData: UserWithoutSensitiveData = this.createUser(
+      user,
+      user.nutritionGoals,
+      user.details,
+    );
+    return userWithoutSensitiveData;
+  }
+
+  private createUser(
+    user: User,
+    nutritionGoals: UserNutritionGoals,
+    details: UserDetails,
+  ): UserWithoutSensitiveData {
+    return {
       id: user.id,
       username: user.username,
       email: user.email,
@@ -12,8 +28,39 @@ export class UserDataConverter {
       firstName: user.firstName,
       lastName: user.lastName,
       authenticationLevel: user.authenticationLevel,
+      nutritionGoals: this.createNutritionGoals(nutritionGoals),
+      details: this.createDetails(details),
     };
-    return userWithoutSensitiveData;
+  }
+
+  private createNutritionGoals(
+    nutritionGoals: UserNutritionGoals,
+  ): Omit<
+    import('d:/PKMaterialy/II_stopien/Programowanie obiektowe II/projekt/foodTrainerBE/src/users/models/user/user-nutrition-goals.model').UserNutritionGoals,
+    'user'
+  > {
+    return {
+      id: nutritionGoals.id,
+      kcal: nutritionGoals.kcal,
+      protein: nutritionGoals.protein,
+      carbs: nutritionGoals.carbs,
+      fats: nutritionGoals.fats,
+    };
+  }
+
+  private createDetails(
+    details: UserDetails,
+  ): Omit<
+    import('d:/PKMaterialy/II_stopien/Programowanie obiektowe II/projekt/foodTrainerBE/src/users/models/user/user-details.model').UserDetails,
+    'user'
+  > {
+    return {
+      id: details.id,
+      age: details.age,
+      height: details.height,
+      weight: details.weight,
+      sex: details.sex,
+    };
   }
 
   public trimUsersSensitiveData(

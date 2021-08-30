@@ -1,53 +1,16 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Test, TestingModule } from '@nestjs/testing';
+import {
+  user1,
+  user1Modified,
+  userDTO1Modified,
+} from '@tests/users/mock-data.model';
 import { of } from 'rxjs';
 import { DeleteResult } from 'typeorm';
 import { UserDTO } from './models/user/user-dto.model';
 import { User } from './models/user/user.model';
 import { UsersService } from './repositories/users.service';
 import { UsersController } from './users.controller';
-
-const userMock: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  hashPassword: () => {},
-  authenticationLevel: 1,
-  isActive: true,
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const userModified: UserDTO = {
-  username: 'usernameMockModified',
-  password: 'secretPassword123Modified',
-  email: 'someemail@gmail.comModified',
-  birthDate: new Date(),
-  phoneNumber: '666777888Modified',
-  firstName: 'firstNameModified',
-  lastName: 'lastNameModified',
-};
-
-const userMockModified: User = {
-  id: 1,
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  ...userModified,
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
 
 const deleteMock: DeleteResult = {
   raw: null,
@@ -107,33 +70,46 @@ describe('Users Controller', () => {
   });
 
   it('should get user credentials by usernames', async () => {
-    ((usersService as unknown) as UsersServiceMock).setReturnedValue(userMock);
+    ((usersService as unknown) as UsersServiceMock).setReturnedValue(user1);
     const findByUsernameSpy = jest.spyOn(usersService, 'findByUsername');
     const credentials = (await controller.getUserCredentials('mike', null))[0];
 
     expect(credentials).toBeTruthy();
     expect(findByUsernameSpy).toHaveBeenCalled();
-    expect(credentials.id).toEqual(userMock.id);
-    expect(credentials.username).toEqual(userMock.username);
-    expect(credentials.email).toEqual(userMock.email);
-    expect(credentials.phoneNumber).toEqual(userMock.phoneNumber);
+    expect(credentials.id).toEqual(user1.id);
+    expect(credentials.username).toEqual(user1.username);
+    expect(credentials.email).toEqual(user1.email);
+    expect(credentials.phoneNumber).toEqual(user1.phoneNumber);
     expect((credentials as User)?.password).toBeFalsy();
+    expect(credentials.details.id).toEqual(user1.details.id);
+    expect(credentials.details.age).toEqual(user1.details.age);
+    expect(credentials.details.height).toEqual(user1.details.height);
+    expect(credentials.details.weight).toEqual(user1.details.weight);
+    expect(credentials.details.sex).toEqual(user1.details.sex);
   });
 
   it('should update user credentials', async () => {
     ((usersService as unknown) as UsersServiceMock).setReturnedValue(
-      userMockModified,
+      user1Modified,
     );
     const updateSpy = jest.spyOn(usersService, 'update');
-    const credentials = await controller.updateUserCredentials(1, userModified);
+    const credentials = await controller.updateUserCredentials(
+      1,
+      userDTO1Modified,
+    );
 
     expect(credentials).toBeTruthy();
     expect(updateSpy).toHaveBeenCalled();
-    expect(credentials.id).toEqual(userMock.id);
-    expect(credentials.username).toEqual(userMockModified.username);
-    expect(credentials.email).toEqual(userMockModified.email);
-    expect(credentials.phoneNumber).toEqual(userMockModified.phoneNumber);
-    expect(credentials.firstName).toEqual(userMockModified.firstName);
-    expect(credentials.lastName).toEqual(userMockModified.lastName);
+    expect(credentials.id).toEqual(user1.id);
+    expect(credentials.username).toEqual(user1Modified.username);
+    expect(credentials.email).toEqual(user1Modified.email);
+    expect(credentials.phoneNumber).toEqual(user1Modified.phoneNumber);
+    expect(credentials.firstName).toEqual(user1Modified.firstName);
+    expect(credentials.lastName).toEqual(user1Modified.lastName);
+    expect(credentials.details.id).toEqual(user1Modified.details.id);
+    expect(credentials.details.age).toEqual(user1Modified.details.age);
+    expect(credentials.details.height).toEqual(user1Modified.details.height);
+    expect(credentials.details.weight).toEqual(user1Modified.details.weight);
+    expect(credentials.details.sex).toEqual(user1Modified.details.sex);
   });
 });

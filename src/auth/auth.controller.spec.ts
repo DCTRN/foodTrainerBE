@@ -4,9 +4,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { user1, userDTO1 } from '@tests/users/mock-data.model';
 import { of } from 'rxjs';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
-import { UserDTO } from 'src/users/models/user/user-dto.model';
 import { User } from 'src/users/models/user/user.model';
 import { UsersService } from 'src/users/repositories/users.service';
 import { Repository } from 'typeorm';
@@ -23,35 +23,6 @@ const tokensMock: Tokens = {
 };
 
 const userCredentialsMock = { username: 'username', password: 'password' };
-
-const userMock: User = {
-  id: 1,
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-  accountCreationDate: new Date(),
-  authenticationLevel: 1,
-  isActive: true,
-  hashPassword: () => {},
-  userFriends1: null,
-  userFriends2: null,
-  products: null,
-  userProducts: null,
-};
-
-const userDTOMock: UserDTO = {
-  username: 'usernameMock',
-  password: 'secretPassword123',
-  email: 'someemail@gmail.com',
-  birthDate: new Date(),
-  phoneNumber: '123123123',
-  firstName: 'firstName',
-  lastName: 'lastName',
-};
 
 describe('Auth Controller', () => {
   let controller: AuthController;
@@ -96,9 +67,9 @@ describe('Auth Controller', () => {
   it('should refresh token', async () => {
     const registerSpy = jest
       .spyOn(authService, 'register')
-      .mockReturnValue(of(userMock).toPromise());
+      .mockReturnValue(of(user1).toPromise());
 
-    await controller.register(userDTOMock);
+    await controller.register(userDTO1);
 
     expect(registerSpy).toHaveBeenCalled();
   });

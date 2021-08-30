@@ -9,6 +9,8 @@ import { FoodModule } from './food/food.module';
 import { Product } from './food/models/products/product.model';
 import { UserProduct } from './food/models/user-products/user-product.model';
 import { UserFriends } from './users/models/user-friends/user-friends.model';
+import { UserDetails } from './users/models/user/user-details.model';
+import { UserNutritionGoals } from './users/models/user/user-nutrition-goals.model';
 import { User } from './users/models/user/user.model';
 
 @Module({
@@ -24,7 +26,14 @@ import { User } from './users/models/user/user.model';
       database: 'foodTrainer',
       autoLoadEntities: true,
       synchronize: true,
-      entities: [User, UserFriends, Product, UserProduct],
+      entities: [
+        UserDetails,
+        UserNutritionGoals,
+        User,
+        UserFriends,
+        Product,
+        UserProduct,
+      ],
     }),
   ],
   controllers: [AppController],

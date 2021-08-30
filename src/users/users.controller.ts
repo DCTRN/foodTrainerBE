@@ -6,14 +6,12 @@ import {
   Patch,
   Query,
   UseFilters,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAccessAuthGuard } from 'src/auth/guards/jwt-access-auth.guard';
 import { DbConstraintExceptionsFilter } from 'src/core/filters/db-constraint-exceptions.filter';
 import { UnauthorizedFilter } from 'src/core/filters/unauthorized.filter';
 import { UserDataConverter } from 'src/core/utils/user-data-converter';
-import { UserDTO } from './models/user/user-dto.model';
+import { UserWithNutritionGoalsDTO } from './models/user/user-with-nurition-goals-dto.model';
 import { UserWithoutSensitiveData } from './models/user/user-without-sensitive-data';
 import { UsersService } from './repositories/users.service';
 
@@ -42,7 +40,7 @@ export class UsersController {
   @Patch(':id')
   public async updateUserCredentials(
     @Param('id') id: number,
-    @Body(ValidationPipe) user: Partial<UserDTO>,
+    @Body(ValidationPipe) user: Partial<UserWithNutritionGoalsDTO>,
   ): Promise<UserWithoutSensitiveData> {
     if (!id) {
       return;
