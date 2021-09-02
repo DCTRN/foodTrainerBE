@@ -33,7 +33,17 @@ export class UsersService {
   }
 
   public async findById(id: number): Promise<User> {
-    return this.userRepository.findOne(id);
+    // return this.userRepository.findOne(id);
+    // TODO test with new fields
+    const users = await this.userRepository.find({
+      where: { id },
+      relations: ['nutritionGoals', 'details'],
+    });
+
+    if (!users?.length) {
+      return;
+    }
+    return users[0];
   }
 
   public async findByUsername(username: string): Promise<User> {

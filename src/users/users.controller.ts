@@ -45,8 +45,13 @@ export class UsersController {
     if (!id) {
       return;
     }
-
+    console.log('updateUserCredentials with id: ', id);
     const u = await this.usersService.update(id, user);
+    console.log('got user: ', u);
+    console.log(
+      'got trimmed user: ',
+      this.userDataConverter.trimUserSensitiveData(u),
+    );
     return this.userDataConverter.trimUserSensitiveData(u);
   }
 }

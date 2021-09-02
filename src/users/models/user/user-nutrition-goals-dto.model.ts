@@ -8,16 +8,16 @@ export class UserNutritionGoalsDTO {
 
   @IsInt()
   @Min(1)
-  @Max(97)
+  @Max(98)
   public protein: number;
 
   @IsInt()
   @Min(1)
-  @Max(97)
+  @Max(98)
   public carbs: number;
 
   @IsInt()
   @Min(1)
-  @Max(97)
+  @Max(98)
   public fats: number;
 }

@@ -99,6 +99,7 @@ export const userWithNutritionGoalsDTO1: UserWithNutritionGoalsDTO = {
 export const user1: User = {
   id: 1,
   ...userDTO1,
+  password: userDTO1.password,
   accountCreationDate: new Date('2020-12-0T12:00:00.000Z'),
   hashPassword: () => {},
   authenticationLevel: 1,
@@ -114,6 +115,7 @@ export const user1: User = {
 export const user2: User = {
   id: 2,
   ...userDTO2,
+  password: userDTO2.password,
   accountCreationDate: new Date('2020-12-0T12:00:00.000Z'),
   hashPassword: () => {},
   authenticationLevel: 1,
@@ -129,6 +131,7 @@ export const user2: User = {
 export const user3: User = {
   id: 3,
   ...userDTO3,
+  password: userDTO3.password,
   accountCreationDate: new Date('2020-12-0T12:00:00.000Z'),
   hashPassword: () => {},
   authenticationLevel: 1,
@@ -144,6 +147,7 @@ export const user3: User = {
 export const user1Modified: User = {
   id: 1,
   ...userDTO1Modified,
+  password: userDTO1Modified.password,
   accountCreationDate: new Date('2020-12-0T12:00:00.000Z'),
   hashPassword: () => {},
   authenticationLevel: 1,
