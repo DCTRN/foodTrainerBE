@@ -13,7 +13,7 @@ export class UserFriends {
   @PrimaryGeneratedColumn()
   public id: number;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'int', default: 0 })
   public isAccepted: boolean;
 
   @Column({ type: 'int' })
@@ -22,7 +22,7 @@ export class UserFriends {
   @CreateDateColumn()
   public friendshipRequestDate: Date;
 
-  @Column({ type: 'timestamp without time zone', nullable: true })
+  @Column({ type: 'date', nullable: true })
   public friendshipAcceptDate: Date;
 
   @ManyToOne(

@@ -10,7 +10,7 @@ export class ProductRepositoryService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   public async findProductBy(searchText: string): Promise<Product[]> {
     const names = await this.findNamesBy(searchText);
@@ -27,12 +27,16 @@ export class ProductRepositoryService {
   }
 
   public async add(product: ProductDTO): Promise<Product> {
-    const user = await this.usersService.findById(product.creatorId);
-    const partialProduct: Partial<Product> = { ...product };
-    partialProduct.creator = user;
-    const productCreatedByDb = this.productRepository.create(partialProduct);
-    const p = await this.productRepository.save(productCreatedByDb);
-    return await this.productRepository.findOne(p.id);
+    try {
+      const user = await this.usersService.findById(product.creatorId);
+      const partialProduct: Partial<Product> = { ...product };
+      partialProduct.creator = user;
+      const productCreatedByDb = this.productRepository.create(partialProduct);
+      const p = await this.productRepository.save(productCreatedByDb);
+      return await this.productRepository.findOne(p.id);
+    } catch (error) {
+      console.warn(error)
+    }
   }
 
   public async update(product: ProductDTO): Promise<Product> {

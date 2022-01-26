@@ -11,7 +11,7 @@ export class UserProduct {
   @Column({ type: 'float' })
   public amount: number;
 
-  @Column({ type: 'timestamp without time zone' })
+  @Column({ type: 'date' })
   public date: Date;
 
   @Column()

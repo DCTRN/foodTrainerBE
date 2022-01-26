@@ -18,14 +18,16 @@ import { User } from './users/models/user/user.model';
     AuthModule,
     FoodModule,
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'admin',
-      database: 'foodTrainer',
+      type: 'oracle',
+      host: '149.156.158.132',
+      port: 1521,
+      serviceName: 'db1.m7-ora1.mech.pk.edu.pl',
+      username: 'ST41K21z_08_TopDown',
+      password: 'oraKJh5623hj',
+      database: 'DB1',
       autoLoadEntities: true,
       synchronize: true,
+      // dropSchema: true,
       entities: [
         UserDetails,
         UserNutritionGoals,
@@ -45,4 +47,4 @@ import { User } from './users/models/user/user.model';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

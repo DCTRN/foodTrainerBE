@@ -36,7 +36,7 @@ export class UserDataConverter {
   private createNutritionGoals(
     nutritionGoals: UserNutritionGoals,
   ): Omit<
-    import('d:/PKMaterialy/II_stopien/Programowanie obiektowe II/projekt/foodTrainerBE/src/users/models/user/user-nutrition-goals.model').UserNutritionGoals,
+    UserNutritionGoals,
     'user'
   > {
     return {
@@ -51,7 +51,7 @@ export class UserDataConverter {
   private createDetails(
     details: UserDetails,
   ): Omit<
-    import('d:/PKMaterialy/II_stopien/Programowanie obiektowe II/projekt/foodTrainerBE/src/users/models/user/user-details.model').UserDetails,
+    UserDetails,
     'user'
   > {
     return {

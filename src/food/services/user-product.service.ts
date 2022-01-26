@@ -19,7 +19,7 @@ export class UserProductService {
   constructor(
     private userProductRepositoryService: UserProductRepositoryService,
     private usersService: UsersService,
-  ) {}
+  ) { }
 
   public async addUserProduct(
     userProduct: UserProductDTO,
@@ -28,7 +28,10 @@ export class UserProductService {
     const userProductFromDB = await this.userProductRepositoryService.add(
       userProduct,
     );
-    return this.createUserProductDTO(userProductFromDB);
+    console.warn('userProductFromDB');
+    console.warn(userProductFromDB);
+    const result = this.createUserProductDTO(userProductFromDB);
+    return result;
   }
 
   public async modifyUserProduct(

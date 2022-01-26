@@ -21,7 +21,7 @@ import { ProductService } from '../services/product.service';
 @Controller('product')
 @UseGuards(JwtAccessAuthGuard)
 export class ProductController {
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) { }
 
   @Get('')
   public findProductBy(
@@ -36,10 +36,15 @@ export class ProductController {
   }
 
   @Post('')
-  public addProduct(
+  public async addProduct(
     @Body(ValidationPipe) product: ProductDTO,
   ): Promise<ProductDTO> {
-    return this.productService.addProduct(product);
+    console.warn('addProduct req');
+    console.warn(product);
+    const result = await this.productService.addProduct(product);
+    console.warn('addProduct result');
+    console.warn(result);
+    return result;
   }
 
   @Patch('')

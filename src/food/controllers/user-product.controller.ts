@@ -23,14 +23,19 @@ import { UserProductService } from '../services/user-product.service';
 @Controller('userProduct')
 // @UseGuards(JwtAccessAuthGuard)
 export class UserProductController {
-  constructor(private userProductService: UserProductService) {}
+  constructor(private userProductService: UserProductService) { }
 
   @Post('findByDate')
   public async findProductByDate(
     @Body(ValidationPipe)
     date: UserProductsByDateDTO,
   ): Promise<UserProductWithProductDTO[]> {
-    return await this.userProductService.findProductByDate(date);
+    console.warn('findProductByDate');
+    console.warn(date);
+    const result = await this.userProductService.findProductByDate(date);
+    console.warn("findProductByDate result");
+    console.warn(result);
+    return result;
   }
 
   @Post('findByDateRange')
@@ -46,7 +51,12 @@ export class UserProductController {
     @Body(ValidationPipe)
     userProduct: UserProductDTO,
   ): Promise<UserProductWithProductDTO> {
-    return await this.userProductService.addUserProduct(userProduct);
+    console.warn('addUserProduct req');
+    console.warn(userProduct);
+    const result = await this.userProductService.addUserProduct(userProduct);
+    console.warn('addUserProduct result');
+    console.warn(result);
+    return result;
   }
 
   @Patch('')
