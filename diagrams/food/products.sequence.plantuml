@@ -20,7 +20,7 @@ alt Valid request
     alt Valid data
 
         ProductService -> ProductRepository: Call db
-        alt Invalid query
+        alt Valid query
 
             ProductRepository -> DataBase: Save product in database
 

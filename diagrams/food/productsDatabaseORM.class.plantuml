@@ -1,0 +1,80 @@
+@startuml
+' #ffbb00 - Controller
+' #00b32a - Service
+' #0077ff - Repository
+
+' DATA STRUCTERS
+
+class UserNutritionGoals {
+    + id: number
+    + kcal: number
+    + protein: number
+    + carbs: number
+    + fats: number
+    + user: User
+}
+UserNutritionGoals --* User
+
+class UserDetails {
+    + id: number
+    + age: number
+    + height: number
+    + weight: number
+    + sex: string
+    + user: User
+}
+UserDetails --* User
+
+class User {
+    + id: number
+    + username: string
+    + password: string
+    + email: string
+    + birthDate: Date
+    + phoneNumber: string
+    + firstName: string
+    + lastName: string
+    + accountCreationDate: Date
+    + authenticationLevel: number
+    + isActive: boolean
+    + userFriends1: UserFriends[]
+    + userFriends2: UserFriends[]
+    + products: Product[]
+    + userProducts: UserProduct[]
+    + nutritionGoals: UserNutritionGoals
+    + details: UserDetails
+}
+
+class Product {
+    + id: number
+    + producer: string
+    + name: string
+    + unit: string
+    + amount: number
+    + kcal: number
+    + protein: number
+    + carbohydrates: number
+    + fats: number
+    + creator: User
+}
+Product --* User
+
+enum MealEatTimeType {
+    BREAKFAST
+    LUNCH
+    DINNER
+    SUPPER
+}
+
+class UserProduct {
+    + id: number
+    + product: Product
+    + amount: number
+    + date: Date
+    + mealTimeType: MealEatTimeType
+    + user: User
+}
+UserProduct --* User
+UserProduct *-right- Product
+UserProduct *-- MealEatTimeType
+@enduml
